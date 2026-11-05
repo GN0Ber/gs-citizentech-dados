@@ -15,11 +15,17 @@ def merge(spark: SparkSession, df: DataFrame, tabela: str, chaves: list[str]) ->
         df.limit(0).write.format("delta").saveAsTable(nome)
     antes = spark.table(nome).count()
     cond = " AND ".join(f"alvo.{c} <=> novo.{c}" for c in chaves)
-    (DeltaTable.forName(spark, nome).alias("alvo")
-        .merge(df.alias("novo"), cond)
-        .whenMatchedUpdateAll()
-        .whenNotMatchedInsertAll()
-        .execute())
+    builder = (DeltaTable.forName(spark, nome).alias("alvo")
+               .merge(df.alias("novo"), cond)
+               .whenMatchedUpdateAll()
+               .whenNotMatchedInsertAll())
+    # Coluna nova no contrato (ex.: metodo_casamento) entra na tabela sem recriar nada.
+    # Colunas só são ADICIONADAS; renomear ou remover continua exigindo decisão explícita.
+    if hasattr(builder, "withSchemaEvolution"):
+        builder = builder.withSchemaEvolution()
+    else:
+        spark.conf.set("spark.databricks.delta.schema.autoMerge.enabled", "true")
+    builder.execute()
     depois = spark.table(nome).count()
     return {"tabela": nome, "antes": antes, "depois": depois, "novas": depois - antes}
 
