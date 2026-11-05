@@ -4,6 +4,7 @@ Gera o DAG gs_coleta_iluminacao a partir de coletores/temas.py:
 
     inicio >> [luminarias, sp156, clima]          (em paralelo)
     luminarias >> [medicoes_robo, ocorrencias_app] (ancoradas no cadastro real)
+    medicoes_robo >> chamados_rpa                  (o RPA abre chamado a partir da medição)
     todas >> conferir_chegada
 
 Requisitos atendidos (slide 35 do enunciado):
