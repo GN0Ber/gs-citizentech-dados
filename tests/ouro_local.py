@@ -42,6 +42,7 @@ def montar_prata(spark, chegada: Path) -> dict:
        il.regras_ocorrencias())
     ok("sp156", il.sp156_para_prata(_csv(spark, chegada / "sp156")), il.regras_sp156())
     ok("clima", il.clima_para_prata(_json(spark, chegada / "clima")), il.regras_clima())
+    ok("chamados", il.chamados_para_prata(_json(spark, chegada / "chamados_rpa"), lums), il.regras_chamados())
     return barrados
 
 
@@ -67,7 +68,7 @@ if __name__ == "__main__":
     spark.sparkContext.setLogLevel("ERROR")
     barrados, res = rodar(spark, Path(sys.argv[1]))
     print("BARRADOS POR REGRA:", barrados)
-    for t in ("dim_luminaria", "dim_regiao", "dim_tempo", "fato_inspecao", "fato_ocorrencia"):
+    for t in ("dim_luminaria", "dim_regiao", "dim_tempo", "fato_inspecao", "fato_ocorrencia", "fato_chamado"):
         print(t, spark.table(t).count())
     for i, df in enumerate(res, 1):
         print(f"\n== Q{i}")

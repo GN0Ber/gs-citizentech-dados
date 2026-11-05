@@ -198,3 +198,27 @@ def test_retry_insiste_em_503(monkeypatch):
         def get(self, *a, **k):
             return next(respostas)
     assert comum.get_com_retry("https://x", sessao=S(), tentativas=3).json() == {"ok": 1}
+
+
+def test_ciclo_de_chamados_abre_atende_conclui_e_robo_confirma(tmp_path):
+    (tmp_path / "luminarias").mkdir()
+    (tmp_path / "luminarias" / "luminarias_2026-11-01.json").write_text(json.dumps({"dados": [
+        {"cd_placa": l["placa"], "lat": l["lat"], "lon": l["lon"], "area_piloto": l["area"],
+         "dc_tipo_iluminacao_publica": "LED"} for l in LUMS]}))
+    status = {}
+    for d in range(3, 15):
+        ds = f"2026-11-{d:02d}"
+        simulado.coletar(ds, tmp_path, "medicoes_robo")
+        p = simulado.coletar(ds, tmp_path, "chamados_rpa")
+        for c in json.loads(p.read_text())["dados"]:
+            assert c["status"] in ("aberto", "em_atendimento", "concluido", "cancelado")
+            status[c["id_chamado"]] = c
+    abertos_por_placa = {}
+    for c in status.values():
+        if c["status"] in ("aberto", "em_atendimento"):
+            abertos_por_placa.setdefault(c["placa"], []).append(c["id_chamado"])
+    assert all(len(v) == 1 for v in abertos_por_placa.values()), "um chamado aberto por placa"
+    concluidas = {c["placa"] for c in status.values() if c["status"] == "concluido"}
+    assert concluidas
+    # depois do reparo o robô mede luz normal na placa
+    assert simulado.reparadas_ate(tmp_path, "2026-11-15") == concluidas

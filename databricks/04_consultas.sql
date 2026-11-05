@@ -1,6 +1,6 @@
 -- Databricks notebook source
 -- MAGIC %md
--- MAGIC # 04 · As 5 consultas da Ouro (requisito 07)
+-- MAGIC # 04 · As consultas da Ouro (requisito 07: 5 obrigatórias, aqui 6)
 -- MAGIC Cada uma responde uma pergunta que o MVP mostra ao gestor. Interpretação dos
 -- MAGIC resultados vai no relatório (item 08), ao lado do print de cada uma.
 
@@ -86,3 +86,19 @@ JOIN workspace.gs.vw_mvp_mapa_luminarias m
   ON m.id_luminaria = a.id_luminaria AND m.situacao <> 'sem_medicao'
 GROUP BY a.faixa_confianca
 ORDER BY a.faixa_confianca DESC;
+
+-- COMMAND ----------
+
+-- Q6 · IMPACTO: depois que o RPA abre o chamado, quanto tempo até o reparo,
+-- e em quantos casos o robô confirmou a luz de volta na ronda seguinte?
+SELECT subprefeitura,
+       count(*)                                                                AS chamados,
+       sum(CASE WHEN status = 'concluido' THEN 1 ELSE 0 END)                   AS concluidos,
+       sum(CASE WHEN status IN ('aberto', 'em_atendimento') THEN 1 ELSE 0 END) AS em_aberto,
+       round(percentile_approx(horas_ate_conclusao, 0.5) / 24, 1)              AS mediana_dias_ate_reparo,
+       round(percentile_approx(horas_ate_conclusao, 0.9) / 24, 1)              AS p90_dias_ate_reparo,
+       round(100 * sum(CASE WHEN reparo_confirmado_pelo_robo THEN 1 ELSE 0 END)
+             / nullif(sum(CASE WHEN status = 'concluido' THEN 1 ELSE 0 END), 0), 1) AS pct_reparo_confirmado
+FROM workspace.gs.fato_chamado
+GROUP BY subprefeitura
+ORDER BY mediana_dias_ate_reparo DESC;

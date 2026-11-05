@@ -92,8 +92,14 @@ def _lux(rng: random.Random, estado: str, tipo: str | None) -> float:
     return round(rng.uniform(*base), 2)
 
 
-def medicoes_robo(ds: str, lums: list[dict], n_min: int = 150, n_max: int = 260) -> list[dict]:
-    """Rota noturna do robô: um dia por área-piloto, em rodízio."""
+def medicoes_robo(ds: str, lums: list[dict], n_min: int = 150, n_max: int = 260,
+                  reparadas: set[str] | None = None) -> list[dict]:
+    """Rota noturna do robô: um dia por área-piloto, em rodízio.
+
+    `reparadas` = placas com chamado concluído antes desta noite: o robô passa a
+    medir luz normal ali, o que permite ao pipeline confirmar o reparo em campo.
+    """
+    reparadas = reparadas or set()
     rng = _rng(ds, "medicoes_robo")
     dia = date.fromisoformat(ds)
     areas = list(AREAS_PILOTO)
@@ -110,6 +116,8 @@ def medicoes_robo(ds: str, lums: list[dict], n_min: int = 150, n_max: int = 260)
     regs = []
     for i, lum in enumerate(rota):
         estado = estado_luminaria(lum["placa"]) if lum.get("placa") else "ok"
+        if lum.get("placa") in reparadas:
+            estado = "ok"
         lat, lon = _ruido_gps(rng, lum["lat"], lum["lon"])
         reg = {
             "id_medicao": f"M{ds.replace('-', '')}{i:05d}",
@@ -184,12 +192,102 @@ def ocorrencias_app(ds: str, lums: list[dict], n_min: int = 20, n_max: int = 45)
     return regs
 
 
+# ---------------------------------------------------------------- chamados do RPA
+
+EQUIPES = {"SE": "EQUIPE-CENTRO", "PINHEIROS": "EQUIPE-OESTE", "CAMPO LIMPO": "EQUIPE-SUL"}
+
+
+def _chamados_anteriores(chegada: Path, ds: str) -> dict[str, dict]:
+    """Último estado conhecido de cada chamado, lendo os arquivos de dias anteriores."""
+    estado: dict[str, dict] = {}
+    for arq in sorted((Path(chegada) / "chamados_rpa").glob("chamados_rpa_*.json")):
+        if arq.stem[-10:] >= ds:
+            continue
+        for c in json.loads(arq.read_text(encoding="utf-8"))["dados"]:
+            estado[c["id_chamado"]] = c
+    return estado
+
+
+def reparadas_ate(chegada: Path, ds: str) -> set[str]:
+    return {c["placa"] for c in _chamados_anteriores(chegada, ds).values()
+            if c.get("status") == "concluido"}
+
+
+def chamados_rpa(ds: str, chegada: Path, corte_prioridade: int = 30) -> list[dict]:
+    """O que o robô de RPA grava por dia: chamados abertos hoje + os que mudaram hoje.
+
+    Abre chamado para cada luminária medida hoje abaixo de 5 lux (prioridade >= corte,
+    mesma regra da vw_mvp_fila_manutencao), um por placa enquanto estiver aberto.
+    O prazo de reparo é sorteado por placa (1 a 10 dias) e o fechamento sai no dia
+    em que vence. ~3% dos chamados são cancelados (endereço não localizado).
+    """
+    dia = date.fromisoformat(ds)
+    anteriores = _chamados_anteriores(chegada, ds)
+    abertos_por_placa = {c["placa"]: c for c in anteriores.values()
+                         if c["status"] in ("aberto", "em_atendimento")}
+    saida: list[dict] = []
+
+    # 1. andamento dos chamados que já existiam
+    for c in abertos_por_placa.values():
+        prazo = 1 + int(_sorteio_estavel("prazo:" + c["id_chamado"]) * 10)
+        aberto = date.fromisoformat(c["aberto_em"][:10])
+        novo = dict(c)
+        if _sorteio_estavel("cancela:" + c["id_chamado"]) < 0.03:
+            novo.update(status="cancelado", atualizado_em=f"{ds}T09:00:00",
+                        motivo="endereço não localizado pela equipe")
+        elif dia >= aberto + timedelta(days=prazo):
+            novo.update(status="concluido", atualizado_em=f"{ds}T16:30:00",
+                        concluido_em=f"{ds}T16:30:00")
+        elif c["status"] == "aberto" and dia >= aberto + timedelta(days=1):
+            novo.update(status="em_atendimento", atualizado_em=f"{ds}T08:00:00")
+        else:
+            continue
+        saida.append(novo)
+
+    # 2. novos chamados a partir das medições desta noite
+    arq = Path(chegada) / "medicoes_robo" / f"medicoes_robo_{ds}.json"
+    if arq.exists():
+        vistos = set(abertos_por_placa)
+        lums = {l["placa"]: l for l in inventario(chegada, ds)}
+        for m in json.loads(arq.read_text(encoding="utf-8"))["dados"]:
+            if m.get("lat") is None or m.get("lux") is None or not (0 <= m["lux"] < 5):
+                continue
+            # a placa vem do casamento com o cadastro, como a fila faz
+            perto = min(lums.values(), default=None,
+                        key=lambda l: (l["lat"] - m["lat"]) ** 2 + (l["lon"] - m["lon"]) ** 2)
+            if not perto or perto["placa"] in vistos:
+                continue
+            prioridade = 60 if m["lux"] < 1 else 30
+            if prioridade < corte_prioridade:
+                continue
+            vistos.add(perto["placa"])
+            saida.append({
+                "id_chamado": f"CH-{ds.replace('-', '')}-{perto['placa']}",
+                "placa": perto["placa"],
+                "area_piloto": m["area_piloto"],
+                "prioridade": prioridade,
+                "situacao_detectada": "apagada" if m["lux"] < 1 else "insuficiente",
+                "status": "aberto",
+                "aberto_em": f"{ds}T07:00:00",
+                "atualizado_em": f"{ds}T07:00:00",
+                "concluido_em": None,
+                "equipe": EQUIPES.get(m["area_piloto"], "EQUIPE-GERAL"),
+                "origem": "rpa",
+            })
+    return saida
+
+
 GERADORES = {"medicoes_robo": medicoes_robo, "ocorrencias_app": ocorrencias_app}
 
 
 def coletar(ds: str, chegada: Path, fonte: str) -> Path:
     lums = inventario(chegada, ds)
-    dados = GERADORES[fonte](ds, lums)
+    if fonte == "chamados_rpa":
+        dados = chamados_rpa(ds, chegada)
+    elif fonte == "medicoes_robo":
+        dados = medicoes_robo(ds, lums, reparadas=reparadas_ate(chegada, ds))
+    else:
+        dados = GERADORES[fonte](ds, lums)
     return gravar_json(destino(chegada, fonte, ds, "json"), dados,
                        metadados_coleta(fonte, ds, "simulado://" + fonte, registros=len(dados),
                                         simulado=True, luminarias_base=len(lums)))

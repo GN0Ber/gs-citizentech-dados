@@ -11,6 +11,7 @@ estão apagadas, onde e em que ordem atender.
 3. Quantas falhas o sistema achou antes de alguém reclamar?
 4. Quanto tempo a cidade leva hoje para resolver poste e fiação pelo SP156?
 5. Quando a visão diz "apagada", o robô confirma?
+6. Depois que o chamado é aberto, quanto tempo leva o reparo, e o robô confirma a luz de volta?
 
 ## Integrantes
 
@@ -28,7 +29,8 @@ estão apagadas, onde e em que ordem atender.
 GeoSampa WFS (cadastro ILUME) ─┐
 SP156 (CKAN, postes/fiação) ───┼─> Airflow 3: gs_coleta_iluminacao (@daily)
 Open-Meteo (sol, chuva) ───────┤     inicio >> [luminarias, sp156, clima] em paralelo
-Robô LDR / app + visão ────────┘     luminarias >> [medicoes_robo, ocorrencias_app]
+Robô LDR / app + visão / RPA ──┘     luminarias >> [medicoes_robo, ocorrencias_app]
+                                     medicoes_robo >> chamados_rpa
                                      tudo >> conferir_chegada  (+ alerta de falha)
         │  chegada/<fonte>/<fonte>_AAAA-MM-DD.<ext>
         ▼  upload em lotes pela interface (Free Edition não conecta ao Airflow)
@@ -36,7 +38,7 @@ Databricks Volume workspace.gs.chegada
         ▼  01_bronze (Auto Loader, checkpoint: só arquivo novo entra)
 bronze_*  ──02_prata (tipos, regras, quarentena, MERGE)──>  prata_*
         ▼  03_ouro
-dim_luminaria · dim_regiao · dim_tempo · fato_inspecao · fato_ocorrencia
+dim_luminaria · dim_regiao · dim_tempo · fato_inspecao · fato_ocorrencia · fato_chamado
         ▼  views vw_mvp_* ──05_export_mvp──> JSON para a API do MVP
 ```
 
@@ -74,7 +76,7 @@ dim_luminaria · dim_regiao · dim_tempo · fato_inspecao · fato_ocorrencia
 | 04 dois lotes | upload de `chegada/` em dias diferentes |
 | 05 Bronze incremental | `01_bronze.py` + `gs.controle_cargas` |
 | 06 Prata | `02_prata.py`, `gs_lib/iluminacao.py` + `gs.controle_qualidade` |
-| 07 Ouro e 5 SQL | `03_ouro.sql`, `04_consultas.sql` |
+| 07 Ouro e 5 SQL | `03_ouro.sql`, `04_consultas.sql` (6 consultas; Q3 e Q6 de impacto) |
 | 08 LGPD e MVP | `cidadao_hash`, coordenada generalizada, `vw_mvp_*`, `docs/contrato_mvp.md` |
 | 09 README | este arquivo |
 

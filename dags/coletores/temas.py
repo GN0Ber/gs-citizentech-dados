@@ -43,9 +43,13 @@ TEMAS = {
             "medicoes_robo": partial(simulado.coletar, fonte="medicoes_robo"),
             # Própria: evidências do app classificadas pela visão (Computer Vision)
             "ocorrencias_app": partial(simulado.coletar, fonte="ocorrencias_app"),
+            # Própria: chamados abertos e fechados pelo robô de RPA (front do Caíque)
+            "chamados_rpa": partial(simulado.coletar, fonte="chamados_rpa"),
         },
     },
 }
 
 # As fontes próprias se ancoram no cadastro real, então esperam a coleta dele
-DEPENDENCIAS = {"medicoes_robo": "luminarias", "ocorrencias_app": "luminarias"}
+DEPENDENCIAS = {"medicoes_robo": "luminarias", "ocorrencias_app": "luminarias",
+                # o RPA abre chamado a partir da medição da noite
+                "chamados_rpa": "medicoes_robo"}

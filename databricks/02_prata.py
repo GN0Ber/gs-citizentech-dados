@@ -12,6 +12,7 @@
 # MAGIC | prata_ocorrencias | id_ocorrencia | categoria, coordenada, confiança 0..1, data não futura |
 # MAGIC | prata_sp156 | id_pedido | abertura válida, coordenada, finalização coerente |
 # MAGIC | prata_clima | subprefeitura + data | data, sol coerente, chuva >= 0 |
+# MAGIC | prata_chamados | id_chamado | status do contrato, prioridade 0..100, conclusão coerente, placa no cadastro |
 
 # COMMAND ----------
 
@@ -46,6 +47,7 @@ processar("ocorrencias", il.ocorrencias_para_prata(b("ocorrencias_app"), lums, S
           il.regras_ocorrencias(), ["id_ocorrencia"])
 processar("sp156", il.sp156_para_prata(b("sp156")), il.regras_sp156(), ["id_pedido"])
 processar("clima", il.clima_para_prata(b("clima")), il.regras_clima(), ["subprefeitura", "data"])
+processar("chamados", il.chamados_para_prata(b("chamados_rpa"), lums), il.regras_chamados(), ["id_chamado"])
 
 # COMMAND ----------
 

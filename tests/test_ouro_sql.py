@@ -23,7 +23,7 @@ def resultado():
 
 def test_cinco_consultas_retornam_linhas(resultado):
     _, (_, consultas) = resultado
-    assert len(consultas) == 5
+    assert len(consultas) == 6
     for i, df in enumerate(consultas, 1):
         assert df.count() > 0, f"Q{i} veio vazia"
 
@@ -45,3 +45,18 @@ def test_fila_de_manutencao_priorizada(resultado):
     fila = spark.table("vw_mvp_fila_manutencao")
     assert fila.where("prioridade < 0 or prioridade > 100").count() == 0
     assert fila.where("situacao = 'apagada'").count() > 0
+
+
+def test_ciclo_dos_chamados(resultado):
+    spark, _ = resultado
+    fato = spark.table("fato_chamado")
+    ids = fato.select("id_chamado").distinct().count()
+    assert ids == fato.count(), "um registro por chamado, no último estado"
+    assert fato.where("status = 'concluido'").count() > 0
+    assert fato.where("status = 'concluido' and horas_ate_conclusao < 0").count() == 0
+    # o robô volta à área a cada 3 noites: parte dos reparos é confirmada em campo
+    assert fato.where("reparo_confirmado_pelo_robo").count() > 0
+    fila = spark.table("vw_mvp_fila_manutencao")
+    assert {"chamado_aberto", "status_chamado"} <= set(fila.columns)
+    painel = spark.table("vw_mvp_painel_subprefeitura")
+    assert "mediana_horas_ate_reparo" in painel.columns

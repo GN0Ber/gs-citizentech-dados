@@ -13,7 +13,7 @@
 
 # fonte -> formato do arquivo na pasta de chegada
 FONTES = {"luminarias": "json", "sp156": "csv", "clima": "json",
-          "medicoes_robo": "json", "ocorrencias_app": "json"}
+          "medicoes_robo": "json", "ocorrencias_app": "json", "chamados_rpa": "json"}
 BASE = "/Volumes/workspace/gs/chegada"
 
 # COMMAND ----------

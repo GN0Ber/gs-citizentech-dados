@@ -100,6 +100,16 @@ def casar_luminaria(pontos: DataFrame, luminarias: DataFrame, chave: str,
             .drop(*[c for c in melhor.columns if c.startswith("__") or c.startswith("l_")]))
 
 
+# ---------------------------------------------------------------- campos opcionais
+
+def _opcional(df: DataFrame, struct: str, campo: str) -> Column:
+    """Lê struct.campo se existir no schema; senão, nulo. O Auto Loader só cria a coluna
+    quando algum arquivo traz o campo, então um campo novo do contrato não quebra a Prata."""
+    tipo = df.schema[struct].dataType
+    nomes = tipo.fieldNames() if hasattr(tipo, "fieldNames") else []
+    return F.col(f"{struct}.{campo}") if campo in nomes else F.lit(None).cast("string")
+
+
 # ---------------------------------------------------------------- medições do robô
 
 def medicoes_para_prata(bronze: DataFrame, luminarias_prata: DataFrame) -> DataFrame:
@@ -111,13 +121,24 @@ def medicoes_para_prata(bronze: DataFrame, luminarias_prata: DataFrame) -> DataF
         F.col("m.lat").cast("double").alias("lat"),
         F.col("m.lon").cast("double").alias("lon"),
         F.col("m.lux").cast("double").alias("lux"),
-        F.col("m.sensor").alias("sensor"),
-        F.col("m.bateria_pct").cast("int").alias("bateria_pct"),
+        _opcional(m, "m", "sensor").alias("sensor"),
+        _opcional(m, "m", "bateria_pct").cast("int").alias("bateria_pct"),
         F.col("m.area_piloto").alias("subprefeitura"),
+        _opcional(m, "m", "placa").alias("placa_informada"),
+        _opcional(m, "m", "situacao_robo").alias("situacao_robo"),
         "arquivo_origem", "carregado_em",
     )
     df = deduplicar(df, ["id_medicao"], [F.col("carregado_em").desc()])
     df = casar_luminaria(df, luminarias_prata, "id_medicao")
+    # Sem GPS, o robô informa a placa do ponto de teste: liga pela placa (menor id do poste)
+    por_placa = (luminarias_prata.groupBy("placa")
+                 .agg(F.min("id_luminaria").alias("__id_placa"),
+                      F.first("lat").alias("__lat_placa"), F.first("lon").alias("__lon_placa")))
+    df = (df.join(por_placa, df.placa_informada == por_placa.placa, "left").drop("placa")
+            .withColumn("id_luminaria", F.coalesce("id_luminaria", "__id_placa"))
+            .withColumn("lat", F.coalesce("lat", "__lat_placa"))
+            .withColumn("lon", F.coalesce("lon", "__lon_placa"))
+            .drop("__id_placa", "__lat_placa", "__lon_placa"))
     return df.withColumn(
         "situacao",
         F.when(F.col("lux") < LUX_APAGADA, "apagada")
@@ -270,3 +291,51 @@ def regras_clima() -> list:
     ("sol_coerente", "Pôr do sol depois do nascer", F.col("por_sol") > F.col("nascer_sol")),
     ("chuva_nao_negativa", "Chuva >= 0 mm", F.col("chuva_mm") >= 0),
 ]
+
+
+# ---------------------------------------------------------------- chamados do RPA
+
+STATUS_CHAMADO = ["aberto", "em_atendimento", "concluido", "cancelado"]
+
+
+def chamados_para_prata(bronze: DataFrame, luminarias_prata: DataFrame) -> DataFrame:
+    """Um registro por chamado, no último estado conhecido.
+
+    Cada arquivo diário traz os chamados abertos ou alterados naquele dia, então o mesmo
+    id_chamado aparece em vários lotes; fica a versão com atualizado_em mais recente
+    (e o MERGE da Prata atualiza o status em vez de duplicar).
+    """
+    c = bronze.select("arquivo_origem", "carregado_em", F.explode("dados").alias("c"))
+    df = c.select(
+        F.col("c.id_chamado").alias("id_chamado"),
+        F.col("c.placa").alias("placa"),
+        F.upper(F.col("c.area_piloto")).alias("subprefeitura"),
+        F.col("c.prioridade").cast("int").alias("prioridade"),
+        F.col("c.situacao_detectada").alias("situacao_detectada"),
+        F.col("c.status").alias("status"),
+        F.to_timestamp("c.aberto_em").alias("aberto_em"),
+        F.to_timestamp("c.atualizado_em").alias("atualizado_em"),
+        F.to_timestamp("c.concluido_em").alias("concluido_em"),
+        F.col("c.equipe").alias("equipe"),
+        "arquivo_origem", "carregado_em",
+    )
+    df = deduplicar(df, ["id_chamado"], [F.col("atualizado_em").desc_nulls_last(),
+                                         F.col("carregado_em").desc()])
+    por_placa = luminarias_prata.groupBy("placa").agg(F.min("id_luminaria").alias("id_luminaria"))
+    return (df.join(por_placa, "placa", "left")
+              .withColumn("horas_ate_conclusao",
+                          F.round((F.unix_timestamp("concluido_em") - F.unix_timestamp("aberto_em")) / 3600, 1)))
+
+
+def regras_chamados() -> list:
+    """(nome, descrição, condição de validade). Função porque Column exige Spark ativo."""
+    return [
+        ("status_conhecido", "Status dentro do contrato", F.col("status").isin(*STATUS_CHAMADO)),
+        ("prioridade_valida", "Prioridade entre 0 e 100", F.col("prioridade").between(0, 100)),
+        ("conclusao_coerente", "Concluído tem data de conclusão e ela não antecede a abertura",
+         F.when(F.col("status") == "concluido",
+                F.col("concluido_em").isNotNull() & (F.col("concluido_em") >= F.col("aberto_em")))
+          .otherwise(F.lit(True))),
+        ("placa_no_cadastro", "Chamado aponta para uma luminária do cadastro ILUME",
+         F.col("id_luminaria").isNotNull()),
+    ]

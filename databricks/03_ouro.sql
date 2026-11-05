@@ -6,6 +6,7 @@
 -- MAGIC
 -- MAGIC * **fato_inspecao**: uma linha por medição do robô (grão: medição) · métricas: lux, distância
 -- MAGIC * **fato_ocorrencia**: uma linha por ocorrência (app/visão) ou pedido do SP156 · métrica: dias de atendimento
+-- MAGIC * **fato_chamado**: uma linha por chamado do RPA (grão: chamado) · métricas: horas até a conclusão, reparo confirmado
 -- MAGIC * **dim_luminaria** (cadastro ILUME real), **dim_regiao**, **dim_tempo**
 -- MAGIC
 -- MAGIC **LGPD na Ouro**: nenhum nome, e-mail ou telefone chega aqui; o cidadão é só um
@@ -100,6 +101,36 @@ FROM workspace.gs.prata_sp156;
 
 -- COMMAND ----------
 
+-- Fato do ciclo de manutenção (grão: chamado). Fecha o indicador "tempo até o reparo":
+-- da abertura pelo RPA à conclusão informada, e se o robô confirmou a luz de volta depois.
+CREATE OR REPLACE TABLE workspace.gs.fato_chamado AS
+WITH confirmacao AS (
+  SELECT c.id_chamado,
+         min(m.data_hora) AS primeira_medicao_ok_apos
+  FROM workspace.gs.prata_chamados c
+  JOIN workspace.gs.prata_medicoes m
+    ON m.id_luminaria = c.id_luminaria AND m.situacao = 'ok' AND m.data_hora > c.concluido_em
+  WHERE c.status = 'concluido'
+  GROUP BY c.id_chamado)
+SELECT c.id_chamado,
+       c.placa,
+       c.id_luminaria,
+       c.subprefeitura,
+       CAST(date_format(c.aberto_em, 'yyyyMMdd') AS INT)   AS data_key,
+       c.prioridade,
+       c.situacao_detectada,
+       c.status,
+       c.equipe,
+       c.aberto_em,
+       c.concluido_em,
+       c.horas_ate_conclusao,
+       k.primeira_medicao_ok_apos,
+       k.primeira_medicao_ok_apos IS NOT NULL               AS reparo_confirmado_pelo_robo
+FROM workspace.gs.prata_chamados c
+LEFT JOIN confirmacao k ON k.id_chamado = c.id_chamado;
+
+-- COMMAND ----------
+
 -- MAGIC %md
 -- MAGIC ## Contrato com o MVP
 -- MAGIC Três views, documentadas em `docs/contrato_mvp.md`. O app, a automação (RPA) e a IA
@@ -134,15 +165,22 @@ WITH visao AS (
   SELECT id_luminaria, max(confianca_visao) AS max_confianca
   FROM workspace.gs.fato_ocorrencia
   WHERE fonte = 'app' AND categoria IN ('luminaria_apagada', 'luminaria_piscando')
-  GROUP BY id_luminaria)
+  GROUP BY id_luminaria),
+chamado AS (
+  SELECT placa, id_chamado, status, aberto_em,
+         row_number() OVER (PARTITION BY placa ORDER BY aberto_em DESC) AS rn
+  FROM workspace.gs.fato_chamado
+  WHERE status IN ('aberto', 'em_atendimento'))
 SELECT m.id_luminaria, m.placa, m.endereco, m.subprefeitura, m.lat, m.lon,
        m.situacao, m.ultimo_lux, m.ultima_medicao, m.ocorrencias_app,
+       ch.id_chamado AS chamado_aberto, ch.status AS status_chamado,
        coalesce(v.max_confianca, 0) AS confianca_visao,
        least(100, CASE m.situacao WHEN 'apagada' THEN 60 WHEN 'insuficiente' THEN 30 ELSE 0 END
                   + least(30, 10 * m.ocorrencias_app)
                   + CASE WHEN v.max_confianca >= 0.8 THEN 10 ELSE 0 END) AS prioridade
 FROM workspace.gs.vw_mvp_mapa_luminarias m
 LEFT JOIN visao v ON v.id_luminaria = m.id_luminaria
+LEFT JOIN chamado ch ON ch.placa = m.placa AND ch.rn = 1
 WHERE m.situacao IN ('apagada', 'insuficiente') OR v.max_confianca >= 0.8;
 
 -- COMMAND ----------
@@ -155,8 +193,15 @@ SELECT r.subprefeitura,
        count(DISTINCT CASE WHEN m.situacao = 'insuficiente' THEN m.id_luminaria END) AS insuficientes,
        round(100 * count(DISTINCT CASE WHEN m.situacao IN ('apagada','insuficiente') THEN m.id_luminaria END)
              / nullif(count(DISTINCT CASE WHEN m.situacao <> 'sem_medicao' THEN m.id_luminaria END), 0), 1)
-         AS pct_com_falha
+         AS pct_com_falha,
+       max(ch.mediana_horas_reparo)   AS mediana_horas_ate_reparo,
+       max(ch.chamados_em_aberto)     AS chamados_em_aberto
 FROM workspace.gs.dim_regiao r
 LEFT JOIN workspace.gs.vw_mvp_mapa_luminarias m ON m.subprefeitura = r.subprefeitura
+LEFT JOIN (SELECT subprefeitura,
+                  percentile_approx(horas_ate_conclusao, 0.5)                               AS mediana_horas_reparo,
+                  sum(CASE WHEN status IN ('aberto', 'em_atendimento') THEN 1 ELSE 0 END)  AS chamados_em_aberto
+           FROM workspace.gs.fato_chamado GROUP BY subprefeitura) ch
+  ON ch.subprefeitura = r.subprefeitura
 WHERE r.area_piloto
 GROUP BY r.subprefeitura, r.luminarias_cadastradas;

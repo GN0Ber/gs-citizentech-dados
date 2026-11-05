@@ -108,3 +108,26 @@ def test_clima_explode_dias(spark):
     assert all(10 < r["horas_escuridao"] < 14 for r in linhas)
     ok, _, _ = aplicar_regras(df, il.regras_clima())
     assert ok.count() == 3
+
+
+def test_medicao_sem_gps_casa_pela_placa(spark, luminarias):
+    placa = luminarias.select("placa").first()[0]
+    linha = ('{"_coleta": {"fonte": "medicoes_robo", "data_coleta": "2026-11-10"}, "dados": ['
+             '{"id_medicao": "MX1", "robo_id": "ROBO-01", "data_hora": "2026-11-10T20:00:00", '
+             '"lat": null, "lon": null, "lux": 0.3, "situacao_robo": "apagada", '
+             '"area_piloto": "SE", "placa": "' + placa + '"}]}')
+    bronze = (spark.read.option("primitivesAsString", "true").json(spark.sparkContext.parallelize([linha]))
+              .withColumn("arquivo_origem", F.lit("teste")).withColumn("carregado_em", F.current_timestamp()))
+    df = il.medicoes_para_prata(bronze, luminarias)
+    r = df.first()
+    assert r["id_luminaria"] is not None and r["lat"] is not None and r["situacao"] == "apagada"
+    ok, _, _ = aplicar_regras(df, il.regras_medicoes())
+    assert ok.count() == 1
+
+
+def test_chamados_ultimo_estado_e_regras(spark, luminarias):
+    df = il.chamados_para_prata(bronze_json(spark, "chamados_rpa"), luminarias)
+    assert df.select("id_chamado").distinct().count() == df.count()
+    ok, _, cont = aplicar_regras(df, il.regras_chamados())
+    assert dict((n, b) for n, _, _, b in cont)["status_conhecido"] == 0
+    assert ok.where("status = 'concluido' and concluido_em is null").count() == 0

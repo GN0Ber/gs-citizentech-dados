@@ -9,6 +9,7 @@ Conferidas contra os portais em 05/11/2026.
 | clima | Open-Meteo `/v1/forecast` | externa real | JSON | diária | 3 pontos | CC BY 4.0 |
 | medicoes_robo | robô LDR (Maker Lab) | própria (simulada até a integração) | JSON | diária (rota noturna) | 150 a 260 medições/noite | própria |
 | ocorrencias_app | app + visão computacional | própria (simulada até a integração) | JSON | diária | 20 a 45/dia | própria |
+| chamados_rpa | robô de RPA (abre e acompanha chamados) | própria (simulada até a integração) | JSON | diária | 25 a 110 chamados alterados/dia | própria |
 
 ## Achados que viram texto no relatório
 
