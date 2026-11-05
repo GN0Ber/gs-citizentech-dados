@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from datetime import date, timedelta
 import sys
 from pathlib import Path
 
@@ -55,7 +56,8 @@ def test_medicoes_tem_sujeira_e_rodam_de_noite():
 
 
 def test_ocorrencias_sem_dado_pessoal_real():
-    regs = [r for d in range(1, 10) for r in simulado.ocorrencias_app(f"2026-11-{d:02d}", LUMS)]
+    regs = [r for d in range(1, 41)
+            for r in simulado.ocorrencias_app((date(2026, 11, 1) + timedelta(days=d)).isoformat(), LUMS)]
     pessoas = [r["cidadao"] for r in regs if r["cidadao"]]
     assert pessoas and all(p["email"].endswith("@exemplo.com") for p in pessoas)
     assert any(r["categoria"] is None for r in regs)

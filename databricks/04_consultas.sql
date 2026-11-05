@@ -67,25 +67,35 @@ LIMIT 20;
 -- COMMAND ----------
 
 -- Q5 · IA responsável: quando a visão diz "luminária apagada", o robô confirma?
--- Precisão por faixa de confiança, cruzando com a medição LDR da mesma luminária.
+-- Cada foto é comparada com a medição LDR da MESMA luminária mais próxima no tempo
+-- (até 3 dias antes ou depois): comparar com a última medição puniria a visão por um
+-- poste que já foi consertado depois da foto.
 WITH alegacoes AS (
-  SELECT o.id_luminaria,
+  SELECT o.id_ocorrencia, o.id_luminaria,
+         to_date(CAST(o.data_key AS STRING), 'yyyyMMdd') AS dia_foto,
          CASE WHEN o.confianca_visao >= 0.9 THEN '0.90+'
               WHEN o.confianca_visao >= 0.8 THEN '0.80-0.89'
               WHEN o.confianca_visao >= 0.6 THEN '0.60-0.79'
               ELSE '<0.60' END AS faixa_confianca
   FROM workspace.gs.fato_ocorrencia o
-  WHERE o.fonte = 'app' AND o.categoria = 'luminaria_apagada' AND o.id_luminaria IS NOT NULL)
-SELECT a.faixa_confianca,
-       count(*)                                                        AS alegacoes_com_medicao,
-       sum(CASE WHEN m.situacao IN ('apagada', 'insuficiente') THEN 1 ELSE 0 END) AS confirmadas_pelo_robo,
-       round(100 * sum(CASE WHEN m.situacao IN ('apagada', 'insuficiente') THEN 1 ELSE 0 END)
-             / count(*), 1)                                            AS precisao_pct
-FROM alegacoes a
-JOIN workspace.gs.vw_mvp_mapa_luminarias m
-  ON m.id_luminaria = a.id_luminaria AND m.situacao <> 'sem_medicao'
-GROUP BY a.faixa_confianca
-ORDER BY a.faixa_confianca DESC;
+  WHERE o.fonte = 'app' AND o.categoria = 'luminaria_apagada' AND o.id_luminaria IS NOT NULL),
+pares AS (
+  SELECT a.faixa_confianca, i.situacao,
+         row_number() OVER (PARTITION BY a.id_ocorrencia
+                            ORDER BY abs(datediff(to_date(i.data_hora), a.dia_foto)), i.data_hora) AS rn
+  FROM alegacoes a
+  JOIN workspace.gs.fato_inspecao i
+    ON i.id_luminaria = a.id_luminaria
+   AND abs(datediff(to_date(i.data_hora), a.dia_foto)) <= 3)
+SELECT faixa_confianca,
+       count(*)                                                                    AS alegacoes_com_medicao,
+       sum(CASE WHEN situacao IN ('apagada', 'insuficiente') THEN 1 ELSE 0 END)    AS confirmadas_pelo_robo,
+       round(100 * sum(CASE WHEN situacao IN ('apagada', 'insuficiente') THEN 1 ELSE 0 END)
+             / count(*), 1)                                                        AS precisao_pct
+FROM pares
+WHERE rn = 1
+GROUP BY faixa_confianca
+ORDER BY faixa_confianca DESC;
 
 -- COMMAND ----------
 

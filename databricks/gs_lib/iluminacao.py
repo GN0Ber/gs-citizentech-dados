@@ -32,7 +32,7 @@ SCHEMAS_DADOS = {
                      "area_piloto:STRING, placa:STRING>>",
     "ocorrencias_app": "ARRAY<STRUCT<id_ocorrencia:STRING, data_hora:STRING, categoria:STRING, "
                        "origem:STRING, confianca_visao:STRING, modelo_visao:STRING, foto_id:STRING, "
-                       "lat:STRING, lon:STRING, area_piloto:STRING, "
+                       "lat:STRING, lon:STRING, area_piloto:STRING, placa:STRING, "
                        "cidadao:STRUCT<nome:STRING, email:STRING, telefone:STRING>>>",
     "clima": "ARRAY<STRUCT<ponto:STRING, latitude:STRING, longitude:STRING, "
              "daily:STRUCT<time:ARRAY<STRING>, sunrise:ARRAY<STRING>, sunset:ARRAY<STRING>, "
@@ -150,6 +150,29 @@ def _opcional(df: DataFrame, struct: str, campo: str) -> Column:
     return F.col(f"{struct}.{campo}") if campo in nomes else F.lit(None).cast("string")
 
 
+def ligar_por_placa(df: DataFrame, luminarias_prata: DataFrame) -> DataFrame:
+    """Placa primeiro, GPS só como reserva.
+
+    Achado do piloto: na zona de teste a luminária mais próxima fica a 12,7 m (mediana) e 34%
+    dos postes têm vizinho a menos de 10 m, abaixo do erro de um GPS de celular (5 a 15 m).
+    Ligar só por coordenada troca o poste com frequência; a placa ILUME pintada no poste
+    (ex.: IP0723371) identifica sem ambiguidade. Requer a coluna placa_informada.
+    """
+    por_placa = (luminarias_prata.groupBy("placa")
+                 .agg(F.min("id_luminaria").alias("__id_placa"),
+                      F.first("lat").alias("__lat_placa"), F.first("lon").alias("__lon_placa")))
+    usa_placa = F.col("__id_placa").isNotNull()
+    return (df.join(por_placa, df.placa_informada == por_placa.placa, "left").drop("placa")
+              .withColumn("metodo_casamento",
+                          F.when(usa_placa, "placa").when(F.col("id_luminaria").isNotNull(), "gps"))
+              .withColumn("id_luminaria", F.coalesce("__id_placa", "id_luminaria"))
+              .withColumn("distancia_luminaria_m",
+                          F.when(usa_placa, F.lit(None).cast("double")).otherwise(F.col("distancia_luminaria_m")))
+              .withColumn("lat", F.coalesce("lat", "__lat_placa"))
+              .withColumn("lon", F.coalesce("lon", "__lon_placa"))
+              .drop("__id_placa", "__lat_placa", "__lon_placa"))
+
+
 # ---------------------------------------------------------------- medições do robô
 
 def medicoes_para_prata(bronze: DataFrame, luminarias_prata: DataFrame) -> DataFrame:
@@ -171,15 +194,7 @@ def medicoes_para_prata(bronze: DataFrame, luminarias_prata: DataFrame) -> DataF
     )
     df = deduplicar(df, ["id_medicao"], [F.col("carregado_em").desc()])
     df = casar_luminaria(df, luminarias_prata, "id_medicao")
-    # Sem GPS, o robô informa a placa do ponto de teste: liga pela placa (menor id do poste)
-    por_placa = (luminarias_prata.groupBy("placa")
-                 .agg(F.min("id_luminaria").alias("__id_placa"),
-                      F.first("lat").alias("__lat_placa"), F.first("lon").alias("__lon_placa")))
-    df = (df.join(por_placa, df.placa_informada == por_placa.placa, "left").drop("placa")
-            .withColumn("id_luminaria", F.coalesce("id_luminaria", "__id_placa"))
-            .withColumn("lat", F.coalesce("lat", "__lat_placa"))
-            .withColumn("lon", F.coalesce("lon", "__lon_placa"))
-            .drop("__id_placa", "__lat_placa", "__lon_placa"))
+    df = ligar_por_placa(df, luminarias_prata)
     return df.withColumn(
         "situacao",
         F.when(F.col("lux") < LUX_APAGADA, "apagada")
@@ -216,13 +231,15 @@ def ocorrencias_para_prata(bronze: DataFrame, luminarias_prata: DataFrame, sal: 
         F.col("o.lat").cast("double").alias("lat"),
         F.col("o.lon").cast("double").alias("lon"),
         F.col("o.area_piloto").alias("subprefeitura"),
+        _opcional(o, "o", "placa").alias("placa_informada"),
         # LGPD: nome e telefone ficam na Bronze; o e-mail vira pseudônimo com sal
         F.when(email.isNotNull(), F.sha2(F.concat(email, F.lit(sal)), 256)).alias("cidadao_hash"),
         F.to_date("data_coleta").alias("data_coleta"),
         "arquivo_origem", "carregado_em",
     )
     df = deduplicar(df, ["id_ocorrencia"], [F.col("carregado_em").desc()])
-    return casar_luminaria(df, luminarias_prata, "id_ocorrencia", raio_m=40.0)
+    df = casar_luminaria(df, luminarias_prata, "id_ocorrencia", raio_m=40.0)
+    return ligar_por_placa(df, luminarias_prata)
 
 
 def regras_ocorrencias() -> list:

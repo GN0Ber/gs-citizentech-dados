@@ -11,10 +11,12 @@ roda as fontes simuladas depois de `coletar_luminarias`.
 
 | Parâmetro | Valor | Racional |
 |---|---|---|
-| Rota do robô | 150 a 260 luminárias por noite, uma área-piloto por noite em rodízio | um robô por noite, 40 s por ponto |
+| Zona de teste | 400 luminárias por área-piloto, as mais próximas do centro | piloto real começa por alguns quarteirões; o robô volta aos mesmos postes |
+| Rota do robô | 150 a 260 luminárias por noite dentro da zona, uma área por noite em rodízio; lê a placa em 95% dos pontos | um robô por noite, 40 s por ponto |
 | Estado das luminárias | 6% apagadas, 10% insuficientes, fixo por placa | lâmpada queimada continua queimada até o reparo |
 | Lux medido | apagada 0,1 a 1; insuficiente 1,5 a 4,5; LED ok 15 a 40 | ordem de grandeza de iluminância sob poste |
-| Ocorrências | 20 a 45 por dia; 70% em luminárias que falham, 30% alarme falso | testa a precisão da visão (consulta Q5) |
+| Ocorrências | 8 a 18 fotos por dia na zona; 70% em luminárias com falha, 30% alarme falso; placa enquadrada em 85% | volume de piloto |
+| Visão simulada | falha real: classe certa e confiança 0,65 a 0,99; alarme falso: confiança 0,45 a 0,85 | um modelo razoável erra mais quando está menos confiante (Q5) |
 | Sujeira proposital | ~6% (lux negativo, GPS sem fix, medição de dia, categoria nula, coordenada no Rio, confiança 1,7) + ~3% reenvios duplicados | faz as regras da Prata barrarem algo real |
 | Determinismo | seed = data | rodar o DAG de novo gera o mesmo arquivo |
 | Dados pessoais | nomes fictícios, e-mails `@exemplo.com` | nenhum dado pessoal real no repositório |

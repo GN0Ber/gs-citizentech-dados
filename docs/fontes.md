@@ -29,6 +29,11 @@ Conferidas contra os portais em 05/11/2026.
 6. **Open-Meteo**: o `/archive` do exemplo do professor chega com ~5 dias de atraso, por
    isso usamos `/forecast` com `start_date/end_date`. A cota diária gratuita é por IP.
 
+7. **GPS não identifica o poste.** Na zona de teste o vizinho mais próximo fica a 12,7 m
+   (mediana) e 34% dos postes têm vizinho a menos de 10 m. Com o erro de GPS de celular, ligar
+   só por coordenada derrubou a precisão medida da visão para ~40%; ligando pela placa ILUME,
+   ela passou a subir com a confiança (66% → 87%). Por isso o contrato pede a placa.
+
 ## Fontes avaliadas e descartadas
 
 * **Infosiga SP (acidentes por turno)**: seria ótima para cruzar escuro × atropelamento, mas

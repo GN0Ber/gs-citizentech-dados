@@ -46,6 +46,7 @@ Regras que o dado precisa passar: lux >= 0, GPS dentro de SP, horário noturno e
 | foto_id | string | sim | id da imagem guardada pelo app (a foto não entra no lake) |
 | lat, lon | número | sim | |
 | area_piloto | string | sim | |
+| placa | string | **fortemente recomendado** | placa ILUME lida na foto ou escolhida no mapa; ver "Por que a placa" abaixo |
 | cidadao | objeto ou null | não | `{nome, email, telefone}`: só fica na Bronze; vira `cidadao_hash` na Prata |
 
 ### 1.3 `chamados_rpa` (RPA: robô que abre e acompanha chamados)
@@ -67,6 +68,15 @@ aparecer em vários dias: a Prata guarda o último estado (MERGE pela chave).
 
 Com isso a Ouro calcula o tempo até o reparo (`fato_chamado`) e confere se o robô mediu luz
 normal na luminária depois da conclusão (`reparo_confirmado_pelo_robo`).
+
+### Por que a placa (achado do piloto)
+
+Na zona de teste, a luminária mais próxima de outra fica a **12,7 m** (mediana) e 34% dos postes
+têm um vizinho a menos de 10 m, abaixo do erro de um GPS de celular (5 a 15 m). Ligar foto ou
+medição ao poste só pela coordenada troca o poste com frequência. Todo poste da ILUME tem a placa
+pintada (ex.: `IP0723371`): o app deve pedir para enquadrar a placa (a visão lê) ou deixar o
+cidadão tocar o poste no mapa, e o robô deve ler a etiqueta do ponto. O pipeline liga pela placa
+e usa o GPS só como reserva (coluna `metodo_casamento` na Prata).
 
 ## 2. O que sai do pipeline (Dados → MVP, IA e Automação)
 

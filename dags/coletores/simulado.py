@@ -72,6 +72,25 @@ def inventario(chegada: Path, ds: str) -> list[dict]:
     return saida
 
 
+ZONA_TESTE = 400  # luminárias por área-piloto onde o robô faz ronda e o app é divulgado
+
+
+def zona_teste(lums: list[dict], n: int = ZONA_TESTE) -> list[dict]:
+    """As n luminárias mais próximas do centro de cada área-piloto.
+
+    Um piloto real começa por alguns quarteirões, não pelos 16 mil pontos da subprefeitura:
+    o robô consegue voltar aos mesmos postes (e confirmar reparos) e as fotos dos cidadãos
+    caem onde o robô também mede (o que permite medir a precisão da visão).
+    """
+    zona = []
+    for area, (lon0, lat0, lon1, lat1) in AREAS_PILOTO.items():
+        cy, cx = (lat0 + lat1) / 2, (lon0 + lon1) / 2
+        da_area = [l for l in lums if l["area"] == area]
+        da_area.sort(key=lambda l: ((l["lat"] - cy) ** 2 + (l["lon"] - cx) ** 2, l["placa"]))
+        zona.extend(da_area[:n])
+    return zona
+
+
 def _ruido_gps(rng: random.Random, lat: float, lon: float, metros: float = 6.0):
     dlat = rng.gauss(0, metros) / 111_320
     dlon = rng.gauss(0, metros) / (111_320 * math.cos(math.radians(lat)))
@@ -104,7 +123,9 @@ def medicoes_robo(ds: str, lums: list[dict], n_min: int = 150, n_max: int = 260,
     dia = date.fromisoformat(ds)
     areas = list(AREAS_PILOTO)
     area = areas[dia.toordinal() % len(areas)]
-    candidatos = sorted((l for l in lums if l["area"] == area), key=lambda l: l["placa"])
+    # rota em ordem geográfica dentro da zona de teste da área
+    candidatos = sorted((l for l in zona_teste(lums) if l["area"] == area),
+                        key=lambda l: (round(l["lat"], 3), l["lon"]))
     n = rng.randint(n_min, n_max)
     if candidatos:
         ini = rng.randrange(max(1, len(candidatos) - n))
@@ -128,6 +149,8 @@ def medicoes_robo(ds: str, lums: list[dict], n_min: int = 150, n_max: int = 260,
             "sensor": "LDR-GL5528",
             "bateria_pct": max(5, 100 - i // 3),
             "area_piloto": area,
+            # o robô lê a etiqueta com a placa do ponto; ~5% das vezes não consegue ler
+            "placa": lum.get("placa") if rng.random() > 0.05 else None,
         }
         s = rng.random()
         if s < 0.02:
@@ -149,11 +172,15 @@ def _pessoa(rng: random.Random, i: int) -> dict:
             "telefone": f"+55 11 9{rng.randint(1000, 9999)}-{rng.randint(1000, 9999)}"}
 
 
-def ocorrencias_app(ds: str, lums: list[dict], n_min: int = 20, n_max: int = 45) -> list[dict]:
+def ocorrencias_app(ds: str, lums: list[dict], n_min: int = 8, n_max: int = 18,
+                    reparadas: set[str] | None = None) -> list[dict]:
     """Evidências do app: foto do cidadão ou da câmera, já classificada pela visão."""
     rng = _rng(ds, "ocorrencias_app")
     dia = date.fromisoformat(ds)
-    com_falha = [l for l in lums if estado_luminaria(l["placa"]) != "ok"]
+    lums = zona_teste(lums)  # o app é divulgado na mesma zona onde o robô faz ronda
+    reparadas = reparadas or set()
+    com_falha = [l for l in lums
+                 if estado_luminaria(l["placa"]) != "ok" and l["placa"] not in reparadas]
     regs = []
     for i in range(rng.randint(n_min, n_max)):
         # 70% das fotos são de luminárias que de fato falham; 30% são alarmes falsos
@@ -165,18 +192,31 @@ def ocorrencias_app(ds: str, lums: list[dict], n_min: int = 20, n_max: int = 45)
         else:
             area = rng.choice(list(AREAS_PILOTO))
             lat, lon, _, _ = _ponto_aleatorio(rng, area)
+        # Um modelo de visão razoável: quando a falha é real, acerta a classe e tem confiança
+        # mais alta; alarme falso (luminária ok, sombra, reflexo) sai com confiança mais baixa.
+        # Assim a consulta Q5 mostra a precisão subindo com a confiança, como num modelo real.
+        falha_real = (bool(fonte) and estado_luminaria(lum["placa"]) != "ok"
+                      and lum["placa"] not in reparadas)
+        if falha_real:
+            categoria = rng.choice(["luminaria_apagada"] * 3 + ["luminaria_piscando"])
+            confianca = round(rng.uniform(0.65, 0.99), 3)
+        else:
+            categoria = rng.choice(CATEGORIAS)
+            confianca = round(rng.uniform(0.45, 0.85), 3)
         origem = rng.choice(["app_foto_cidadao", "app_foto_cidadao", "camera_visao"])
         quando = datetime.combine(dia, datetime.min.time()) + timedelta(
             minutes=rng.randint(18 * 60, 24 * 60 - 1))
         reg = {
             "id_ocorrencia": f"O{ds.replace('-', '')}{i:04d}",
             "data_hora": quando.isoformat(),
-            "categoria": rng.choice(CATEGORIAS),
+            "categoria": categoria,
             "origem": origem,
-            "confianca_visao": round(rng.uniform(0.45, 0.99), 3),
+            "confianca_visao": confianca,
             "modelo_visao": "yolo-luminaria-v1",
             "foto_id": hashlib.sha1(f"{ds}{i}".encode()).hexdigest()[:16],
             "lat": lat, "lon": lon, "area_piloto": area,
+            # a placa ILUME pintada no poste, lida na foto; o cidadão nem sempre enquadra
+            "placa": (lum["placa"] if fonte and rng.random() < 0.85 else None),
             "cidadao": _pessoa(rng, i) if origem == "app_foto_cidadao" else None,
         }
         s = rng.random()
@@ -286,6 +326,8 @@ def coletar(ds: str, chegada: Path, fonte: str) -> Path:
         dados = chamados_rpa(ds, chegada)
     elif fonte == "medicoes_robo":
         dados = medicoes_robo(ds, lums, reparadas=reparadas_ate(chegada, ds))
+    elif fonte == "ocorrencias_app":
+        dados = ocorrencias_app(ds, lums, reparadas=reparadas_ate(chegada, ds))
     else:
         dados = GERADORES[fonte](ds, lums)
     return gravar_json(destino(chegada, fonte, ds, "json"), dados,
