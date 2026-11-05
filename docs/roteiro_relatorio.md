@@ -4,7 +4,7 @@ Fora da ordem tira até 1 ponto; print sem legenda também. Todo print com legen
 
 | # | Seção | O que colocar | De onde tirar |
 |---|---|---|---|
-| 01 | Integrantes | nome completo e RM de todos | |
+| 01 | Integrantes | Caíque Walter Silva (RM550693), Guilherme Nobre Bernardo (RM98604), Guilherme Monteiro Espim (RM99499), João Paulo Fonseca Zamperlini (RM99279), Matheus José de Lima Costa (RM551157) | README |
 | 02 | Produto e perguntas | 1 frase do produto + as 5 perguntas do README | README |
 | 03 | Diagrama do fluxo | fonte → Airflow → chegada → Volume → Bronze → Prata → Ouro → MVP | diagrama do README redesenhado |
 | 04 | Tabela de fontes | origem, formato, frequência | `docs/fontes.md` |

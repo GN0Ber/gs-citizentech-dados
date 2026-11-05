@@ -12,7 +12,15 @@ estão apagadas, onde e em que ordem atender.
 4. Quanto tempo a cidade leva hoje para resolver poste e fiação pelo SP156?
 5. Quando a visão diz "apagada", o robô confirma?
 
-**Integrantes:** _preencher nome completo e RM de todos (vale -0,5 se faltar)._
+## Integrantes
+
+| Nome | RM |
+| --- | --- |
+| Caíque Walter Silva | RM550693 |
+| Guilherme Nobre Bernardo | RM98604 |
+| Guilherme Monteiro Espim | RM99499 |
+| João Paulo Fonseca Zamperlini | RM99279 |
+| Matheus José de Lima Costa | RM551157 |
 
 ## Arquitetura
 
