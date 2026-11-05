@@ -14,14 +14,37 @@ Fora da ordem tira até 1 ponto; print sem legenda também. Todo print com legen
 | 08 | 5 consultas SQL | resultado + interpretação de 2 a 3 linhas cada | `04_consultas.sql` |
 | 09 | Conclusão e link | o que funcionou, limites (dados próprios simulados até a integração), próximo passo | |
 
-## Frases de interpretação (ajustar aos números finais)
+## Calendário até a entrega (19/11)
 
-* **Q1**: no ensaio local, 13% a 17% das luminárias inspecionadas tinham falha (Pinheiros 13,5%, Sé 16,7%).
-* **Q3 (impacto)**: praticamente todas as falhas achadas pelo robô não tinham relato de cidadão.
-  É o argumento central: hoje a cidade só sabe da lâmpada apagada quando alguém reclama.
-* **Q4 (dado real)**: de abril a setembro de 2026 o SP156 recebeu ~1.800 pedidos de poste em
-  mau estado e fiação solta; 87% dos de fiação solta seguiam em aberto e os finalizados
-  levaram mediana de 19 dias. Atenção: "finalizada" no SP156 pode significar encaminhada à
-  concessionária, não consertada.
-* **Q5**: com poucos dias de dado a amostra é pequena; com uma semana de coleta a precisão
-  por faixa de confiança fica mostrável.
+| Quando | O quê |
+|---|---|
+| 05/11 | Lote 1 (01–03) e lote 2 (04–05) carregados; prints de Volume, Bronze (incremental e `novas = 0`), Prata, Q1, Q2 e Q4 **já valem** |
+| 06 a 15/11 | Airflow ligado ao menos uma vez a cada 2 ou 3 dias; o `catchup` coleta os dias que faltarem |
+| 16/11 | Subir os arquivos novos no Volume; rodar 01 → 04; refazer os prints de **Q3, Q5 e Q6** (precisam de ~2 semanas de dado) e do Grid do Airflow |
+| 17–18/11 | Montar o PDF nesta ordem; revisão cruzada com o grupo |
+
+## Frases de interpretação (resultado de 05/11, 5 dias; ajustar aos números finais)
+
+* **Q1**: 15,9% a 18,2% das luminárias inspecionadas com falha; Campo Limpo é a pior
+  (33 apagadas e 40 insuficientes). "Uma em cada seis luminárias não ilumina o mínimo."
+* **Q2**: a fila soma evidências: apagada vale 60, relato de cidadão +10, visão com confiança
+  ≥ 0,8 +10. O topo (prioridade 80) tem as três; a placa vai pronta para a equipe da ILUME.
+* **Q3 (impacto)**: ~96% das falhas achadas pelo robô não tinham relato de cidadão. Ressalva
+  obrigatória: o volume de fotos é simulado; o número real depende da adesão ao app.
+* **Q4 (dado real, o mais forte do trabalho)**: no SP156, pedidos de poste em mau estado e
+  fiação solta levam de 8 a 45 dias (mediana) conforme a subprefeitura, e várias têm mais de
+  80% em aberto. "Hoje a cidade leva semanas; o robô detecta em até 3 noites." Atenção:
+  "finalizada" no SP156 pode significar encaminhada à concessionária, não consertada.
+* **Q5 (IA responsável)**: com 5 dias só havia 5 alegações comparáveis; não concluir nada com
+  isso. Na simulação de 10 noites a precisão subiu com a confiança (≈66% → 87%). A frase final
+  vem do print de 16/11.
+* **Q6**: com poucos dias, a mediana dos concluídos mostra só os reparos rápidos (viés de
+  sobrevivência); por isso a consulta traz também `mediana_dias_esperando_abertos`. O robô
+  volta a cada área a cada 3 noites, então a confirmação do reparo só aparece com mais dias.
+* **Bronze × Prata (item 07)**: a Bronze do SP156 tem 5.565 linhas (5 cópias do recorte
+  trimestral, guardado como chegou); a Prata tem 1.113 pedidos únicos. O MERGE pela chave hash
+  é o que garante que reprocessar não duplica. Luminárias reenviadas (01–03) não entraram de
+  novo: o checkpoint do Auto Loader reconhece arquivo já lido.
+* **Qualidade (Prata)**: das 1.077 medições, as regras barraram 28 fora do horário noturno,
+  26 com lux negativo, 14 sem GPS e 14 longe de luminária; ocorrências: 3 sem categoria,
+  3 com confiança fora de 0..1, 2 fora do município. Vão para a quarentena, não somem.

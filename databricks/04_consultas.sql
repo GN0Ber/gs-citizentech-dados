@@ -101,6 +101,10 @@ ORDER BY faixa_confianca DESC;
 
 -- Q6 · IMPACTO: depois que o RPA abre o chamado, quanto tempo até o reparo,
 -- e em quantos casos o robô confirmou a luz de volta na ronda seguinte?
+-- A mediana dos concluídos sozinha engana no começo do piloto: só os reparos rápidos já
+-- terminaram. Por isso a consulta mostra também há quantos dias os abertos estão esperando
+-- (contado até o último evento registrado, para o resultado não mudar com o relógio).
+WITH ref AS (SELECT max(coalesce(concluido_em, aberto_em)) AS agora FROM workspace.gs.fato_chamado)
 SELECT subprefeitura,
        count(*)                                                                AS chamados,
        sum(CASE WHEN status = 'concluido' THEN 1 ELSE 0 END)                   AS concluidos,
@@ -108,7 +112,10 @@ SELECT subprefeitura,
        round(percentile_approx(horas_ate_conclusao, 0.5) / 24, 1)              AS mediana_dias_ate_reparo,
        round(percentile_approx(horas_ate_conclusao, 0.9) / 24, 1)              AS p90_dias_ate_reparo,
        round(100 * sum(CASE WHEN reparo_confirmado_pelo_robo THEN 1 ELSE 0 END)
-             / nullif(sum(CASE WHEN status = 'concluido' THEN 1 ELSE 0 END), 0), 1) AS pct_reparo_confirmado
-FROM workspace.gs.fato_chamado
+             / nullif(sum(CASE WHEN status = 'concluido' THEN 1 ELSE 0 END), 0), 1) AS pct_reparo_confirmado,
+       round(percentile_approx(CASE WHEN status IN ('aberto', 'em_atendimento')
+             THEN (unix_timestamp(ref.agora) - unix_timestamp(aberto_em)) / 86400 END, 0.5), 1)
+                                                                               AS mediana_dias_esperando_abertos
+FROM workspace.gs.fato_chamado CROSS JOIN ref
 GROUP BY subprefeitura
 ORDER BY mediana_dias_ate_reparo DESC;
