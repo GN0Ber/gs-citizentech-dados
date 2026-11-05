@@ -18,7 +18,8 @@ from gs_lib.comum import aplicar_regras, nome_coluna  # noqa: E402
 
 
 def _json(spark, pasta):
-    return (spark.read.option("primitivesAsString", "true").json(str(pasta))
+    return (# como o Auto Loader grava: objetos JSON viram texto na Bronze
+            spark.read.schema("_coleta STRING, dados STRING").json(str(pasta))
             .withColumn("arquivo_origem", F.input_file_name())
             .withColumn("carregado_em", F.current_timestamp()))
 

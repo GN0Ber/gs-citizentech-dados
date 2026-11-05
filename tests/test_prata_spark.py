@@ -32,7 +32,8 @@ def spark():
 
 
 def bronze_json(spark, fonte):
-    return (spark.read.option("primitivesAsString", "true").json(str(AMOSTRAS / fonte))
+    return (# como o Auto Loader grava: objetos JSON viram texto na Bronze
+            spark.read.schema("_coleta STRING, dados STRING").json(str(AMOSTRAS / fonte))
             .withColumn("arquivo_origem", F.input_file_name())
             .withColumn("carregado_em", F.current_timestamp()))
 
@@ -57,7 +58,7 @@ def test_nome_coluna():
 
 
 def test_luminarias_dedup_por_id_entre_lotes(spark, luminarias):
-    bruto = bronze_json(spark, "luminarias").select(F.explode("dados")).count()
+    bruto = il.abrir_json(bronze_json(spark, "luminarias"), "luminarias").select(F.explode("dados")).count()
     ids = luminarias.select("id_luminaria").distinct().count()
     assert ids == luminarias.count(), "uma linha por id_luminaria"
     assert bruto > ids, "a amostra tem dois lotes com os mesmos pontos"

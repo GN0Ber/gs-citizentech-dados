@@ -13,6 +13,45 @@ from pyspark.sql.window import Window
 
 from .comum import chave_hash, deduplicar, dentro_de_sp
 
+
+# ---------------------------------------------------------------- leitura da Bronze
+
+# O Auto Loader (sem cloudFiles.inferColumnTypes) grava cada campo do JSON como TEXTO na
+# Bronze: `_coleta` e `dados` chegam como string. É o dado bruto, como deve ser; a Prata
+# converte com o schema do contrato. Tudo é lido como STRING e tipado depois, para que um
+# valor fora do tipo vire nulo (e caia numa regra de qualidade) em vez de quebrar a carga.
+SCHEMA_COLETA = "STRUCT<fonte:STRING, data_coleta:STRING, url:STRING, coletado_em:STRING>"
+
+SCHEMAS_DADOS = {
+    "luminarias": "ARRAY<STRUCT<cd_identificador_iluminacao_publica:STRING, cd_numero_imovel:STRING, "
+                  "dc_tipo_iluminacao_publica:STRING, dt_carga:STRING, sg_fonte_original:STRING, "
+                  "tx_endereco:STRING, cd_placa:STRING, tx_unidade:STRING, lon:STRING, lat:STRING, "
+                  "area_piloto:STRING>>",
+    "medicoes_robo": "ARRAY<STRUCT<id_medicao:STRING, robo_id:STRING, data_hora:STRING, lat:STRING, "
+                     "lon:STRING, lux:STRING, situacao_robo:STRING, sensor:STRING, bateria_pct:STRING, "
+                     "area_piloto:STRING, placa:STRING>>",
+    "ocorrencias_app": "ARRAY<STRUCT<id_ocorrencia:STRING, data_hora:STRING, categoria:STRING, "
+                       "origem:STRING, confianca_visao:STRING, modelo_visao:STRING, foto_id:STRING, "
+                       "lat:STRING, lon:STRING, area_piloto:STRING, "
+                       "cidadao:STRUCT<nome:STRING, email:STRING, telefone:STRING>>>",
+    "clima": "ARRAY<STRUCT<ponto:STRING, latitude:STRING, longitude:STRING, "
+             "daily:STRUCT<time:ARRAY<STRING>, sunrise:ARRAY<STRING>, sunset:ARRAY<STRING>, "
+             "daylight_duration:ARRAY<STRING>, precipitation_sum:ARRAY<STRING>, "
+             "temperature_2m_max:ARRAY<STRING>, temperature_2m_min:ARRAY<STRING>>>>",
+    "chamados_rpa": "ARRAY<STRUCT<id_chamado:STRING, placa:STRING, area_piloto:STRING, prioridade:STRING, "
+                    "situacao_detectada:STRING, status:STRING, aberto_em:STRING, atualizado_em:STRING, "
+                    "concluido_em:STRING, equipe:STRING, origem:STRING, motivo:STRING>>",
+}
+
+
+def abrir_json(bronze: DataFrame, fonte: str) -> DataFrame:
+    """Converte `_coleta` e `dados` de texto para estrutura (se já forem estrutura, mantém)."""
+    df = bronze
+    for coluna, schema in (("_coleta", SCHEMA_COLETA), ("dados", SCHEMAS_DADOS[fonte])):
+        if coluna in df.columns and df.schema[coluna].dataType.typeName() == "string":
+            df = df.withColumn(coluna, F.from_json(F.col(coluna), schema))
+    return df
+
 # Limiares de iluminância medida pelo robô sob a luminária (lux).
 # Referência: ABNT NBR 5101 (iluminação pública) exige iluminância média de alguns
 # lux nas vias de pedestres, conforme a classe da via. Valores de trabalho do MVP,
@@ -25,6 +64,7 @@ RAIO_CASAMENTO_M = 30.0
 # ---------------------------------------------------------------- luminárias
 
 def luminarias_para_prata(bronze: DataFrame) -> DataFrame:
+    bronze = abrir_json(bronze, "luminarias")
     l = bronze.select(F.col("_coleta.data_coleta").alias("data_coleta"), "arquivo_origem",
                       "carregado_em", F.explode("dados").alias("l"))
     df = l.select(
@@ -113,6 +153,7 @@ def _opcional(df: DataFrame, struct: str, campo: str) -> Column:
 # ---------------------------------------------------------------- medições do robô
 
 def medicoes_para_prata(bronze: DataFrame, luminarias_prata: DataFrame) -> DataFrame:
+    bronze = abrir_json(bronze, "medicoes_robo")
     m = bronze.select("arquivo_origem", "carregado_em", F.explode("dados").alias("m"))
     df = m.select(
         F.col("m.id_medicao").alias("id_medicao"),
@@ -160,6 +201,7 @@ def regras_medicoes() -> list:
 # ---------------------------------------------------------------- ocorrências do app
 
 def ocorrencias_para_prata(bronze: DataFrame, luminarias_prata: DataFrame, sal: str) -> DataFrame:
+    bronze = abrir_json(bronze, "ocorrencias_app")
     o = bronze.select(F.col("_coleta.data_coleta").alias("data_coleta"), "arquivo_origem",
                       "carregado_em", F.explode("dados").alias("o"))
     email = F.lower(F.trim(F.col("o.cidadao.email")))
@@ -265,6 +307,7 @@ def regras_sp156() -> list:
 # ---------------------------------------------------------------- clima
 
 def clima_para_prata(bronze: DataFrame) -> DataFrame:
+    bronze = abrir_json(bronze, "clima")
     p = bronze.select("arquivo_origem", "carregado_em", F.explode("dados").alias("p"))
     d = p.select("arquivo_origem", "carregado_em", F.col("p.ponto").alias("ponto"),
                  F.col("p.daily").alias("daily"))
@@ -305,6 +348,7 @@ def chamados_para_prata(bronze: DataFrame, luminarias_prata: DataFrame) -> DataF
     id_chamado aparece em vários lotes; fica a versão com atualizado_em mais recente
     (e o MERGE da Prata atualiza o status em vez de duplicar).
     """
+    bronze = abrir_json(bronze, "chamados_rpa")
     c = bronze.select("arquivo_origem", "carregado_em", F.explode("dados").alias("c"))
     df = c.select(
         F.col("c.id_chamado").alias("id_chamado"),
