@@ -16,12 +16,27 @@
 
 # COMMAND ----------
 
-# Sal da pseudonimização (LGPD). NÃO commitar o valor: digite no widget ao rodar.
-dbutils.widgets.text("sal_lgpd", "")
-SAL = dbutils.widgets.get("sal_lgpd")
-assert len(SAL) >= 16, "Informe um sal com 16+ caracteres no widget sal_lgpd (fica fora do repositório)"
+# Sal da pseudonimização (LGPD). Nunca fica no código nem no Git.
+# Ordem: widget sal_lgpd (se preenchido) → arquivo no Volume → gera um aleatório na 1ª vez
+# e guarda no Volume, para o lote 2 usar o MESMO sal (senão os pseudônimos mudam).
+import os, sys, secrets
+ARQ_SAL = "/Volumes/workspace/gs/chegada/_controle/sal_lgpd.txt"
+try:
+    dbutils.widgets.text("sal_lgpd", "")
+    SAL = dbutils.widgets.get("sal_lgpd").strip()
+except Exception:
+    SAL = ""
+if len(SAL) < 16:
+    if os.path.exists(ARQ_SAL):
+        SAL = open(ARQ_SAL, encoding="utf-8").read().strip()
+    else:
+        SAL = secrets.token_hex(24)
+        os.makedirs(os.path.dirname(ARQ_SAL), exist_ok=True)
+        with open(ARQ_SAL, "w", encoding="utf-8") as f:
+            f.write(SAL)
+        print("Sal novo gerado e guardado no Volume (fora do Git):", ARQ_SAL)
+assert len(SAL) >= 16, "Sal inválido"
 
-import os, sys
 sys.path.insert(0, os.getcwd())
 from gs_lib import iluminacao as il
 from gs_lib.comum import aplicar_regras
