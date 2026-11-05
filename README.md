@@ -42,7 +42,10 @@ dim_luminaria · dim_regiao · dim_tempo · fato_inspecao · fato_ocorrencia
 
 ## Como reproduzir
 
-1. **Airflow 3 (local, Linux/WSL ou Mac)**
+1. **Airflow 3 com interface, via Docker (recomendado no Windows)**
+   Com o Docker Desktop aberto, na pasta do repositório: `docker compose up`. Abra
+   http://localhost:8080, ative `gs_coleta_iluminacao` e acompanhe nas telas Graph e Grid.
+   Os arquivos caem em `chegada/`. Alternativa sem Docker (Linux/WSL ou Mac):
    ```bash
    python -m venv .venv && source .venv/bin/activate
    pip install -r requirements.txt

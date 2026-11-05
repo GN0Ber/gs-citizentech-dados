@@ -1,0 +1,27 @@
+# Airflow 3 local com interface web, para rodar o DAG e tirar os prints do relatório.
+#
+#   docker compose up        → abre em http://localhost:8080 (sem senha, só local)
+#   docker compose down      → desliga (e apaga o histórico de execuções)
+#   docker compose stop      → desliga mantendo o histórico
+#
+# Os arquivos coletados caem em ./chegada (a mesma pasta da coleta manual).
+# Só para desenvolvimento na própria máquina: não publique esta porta na internet.
+services:
+  airflow:
+    image: apache/airflow:3.1.8-python3.12
+    command: standalone
+    ports:
+      - "127.0.0.1:8080:8080"   # só acessível pelo próprio computador
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "False"
+      AIRFLOW__CORE__DEFAULT_TIMEZONE: "America/Sao_Paulo"
+      # dispensa login (cada usuário vira admin): aceitável só porque a porta é local
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "True"
+      # Variable gs_chegada (o DAG lê daqui; nada de caminho fixo no código)
+      AIRFLOW_VAR_GS_CHEGADA: /opt/airflow/chegada
+      # Variable gs_webhook_url: alerta de falha no Discord/Teams (opcional).
+      # Coloque o valor num arquivo .env (já ignorado pelo Git), nunca aqui.
+      AIRFLOW_VAR_GS_WEBHOOK_URL: ${GS_WEBHOOK_URL:-}
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./chegada:/opt/airflow/chegada
