@@ -1,0 +1,88 @@
+-- Databricks notebook source
+-- MAGIC %md
+-- MAGIC # 04 · As 5 consultas da Ouro (requisito 07)
+-- MAGIC Cada uma responde uma pergunta que o MVP mostra ao gestor. Interpretação dos
+-- MAGIC resultados vai no relatório (item 08), ao lado do print de cada uma.
+
+-- COMMAND ----------
+
+-- Q1 · Qual a situação da iluminação em cada subprefeitura do piloto agora?
+-- (última medição de cada luminária inspecionada)
+SELECT subprefeitura, luminarias_cadastradas, luminarias_inspecionadas,
+       apagadas, insuficientes, pct_com_falha
+FROM workspace.gs.vw_mvp_painel_subprefeitura
+ORDER BY pct_com_falha DESC;
+
+-- COMMAND ----------
+
+-- Q2 · Quais luminárias a equipe de campo deve atender primeiro?
+SELECT placa, endereco, subprefeitura, situacao, ultimo_lux, ocorrencias_app,
+       confianca_visao, prioridade
+FROM workspace.gs.vw_mvp_fila_manutencao
+ORDER BY prioridade DESC, ultimo_lux ASC
+LIMIT 20;
+
+-- COMMAND ----------
+
+-- Q3 · IMPACTO: quantas falhas o sistema achou antes de algum cidadão reclamar,
+-- e quantas horas de rua no escuro isso representa por noite?
+WITH falhas AS (
+  SELECT m.id_luminaria, m.subprefeitura, m.situacao, m.ocorrencias_app
+  FROM workspace.gs.vw_mvp_mapa_luminarias m
+  WHERE m.situacao IN ('apagada', 'insuficiente')),
+escuro AS (
+  SELECT subprefeitura, avg(horas_escuridao) AS horas_escuridao_media
+  FROM workspace.gs.prata_clima GROUP BY subprefeitura)
+SELECT f.subprefeitura,
+       count(*)                                              AS falhas_detectadas,
+       sum(CASE WHEN f.ocorrencias_app = 0 THEN 1 ELSE 0 END) AS falhas_sem_nenhum_relato,
+       round(100 * sum(CASE WHEN f.ocorrencias_app = 0 THEN 1 ELSE 0 END) / count(*), 1)
+                                                             AS pct_deteccao_proativa,
+       round(sum(CASE WHEN f.situacao = 'apagada' THEN 1 ELSE 0 END)
+             * coalesce(max(e.horas_escuridao_media), 11), 0) AS horas_luminaria_no_escuro_por_noite
+FROM falhas f
+LEFT JOIN escuro e ON e.subprefeitura = f.subprefeitura
+GROUP BY f.subprefeitura
+ORDER BY falhas_sem_nenhum_relato DESC;
+
+-- COMMAND ----------
+
+-- Q4 · Linha de base REAL: quanto a cidade demora hoje para resolver poste em mau estado
+-- e fiação solta pelo SP156, por subprefeitura? (é o tempo que o produto quer reduzir)
+SELECT f.subprefeitura,
+       f.categoria,
+       count(*)                                                     AS pedidos,
+       sum(CASE WHEN f.status = 'Finalizada' THEN 1 ELSE 0 END)     AS finalizados,
+       round(100 * sum(CASE WHEN f.status IN ('Aberto', 'Em Andamento') THEN 1 ELSE 0 END)
+             / count(*), 1)                                         AS pct_em_aberto,
+       percentile_approx(f.dias_atendimento, 0.5)                   AS mediana_dias,
+       percentile_approx(f.dias_atendimento, 0.9)                   AS p90_dias
+FROM workspace.gs.fato_ocorrencia f
+WHERE f.fonte = 'sp156'
+GROUP BY f.subprefeitura, f.categoria
+HAVING count(*) >= 5
+ORDER BY mediana_dias DESC
+LIMIT 20;
+
+-- COMMAND ----------
+
+-- Q5 · IA responsável: quando a visão diz "luminária apagada", o robô confirma?
+-- Precisão por faixa de confiança, cruzando com a medição LDR da mesma luminária.
+WITH alegacoes AS (
+  SELECT o.id_luminaria,
+         CASE WHEN o.confianca_visao >= 0.9 THEN '0.90+'
+              WHEN o.confianca_visao >= 0.8 THEN '0.80-0.89'
+              WHEN o.confianca_visao >= 0.6 THEN '0.60-0.79'
+              ELSE '<0.60' END AS faixa_confianca
+  FROM workspace.gs.fato_ocorrencia o
+  WHERE o.fonte = 'app' AND o.categoria = 'luminaria_apagada' AND o.id_luminaria IS NOT NULL)
+SELECT a.faixa_confianca,
+       count(*)                                                        AS alegacoes_com_medicao,
+       sum(CASE WHEN m.situacao IN ('apagada', 'insuficiente') THEN 1 ELSE 0 END) AS confirmadas_pelo_robo,
+       round(100 * sum(CASE WHEN m.situacao IN ('apagada', 'insuficiente') THEN 1 ELSE 0 END)
+             / count(*), 1)                                            AS precisao_pct
+FROM alegacoes a
+JOIN workspace.gs.vw_mvp_mapa_luminarias m
+  ON m.id_luminaria = a.id_luminaria AND m.situacao <> 'sem_medicao'
+GROUP BY a.faixa_confianca
+ORDER BY a.faixa_confianca DESC;

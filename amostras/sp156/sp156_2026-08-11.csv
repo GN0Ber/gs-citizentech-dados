@@ -1,0 +1,151 @@
+Data de Abertura,Data de Finalização,Meio de Comunicação,Tema,Assunto,Serviço,Status,Órgão,Logradouro,Número,CEP,Latitude,Longitude,Prefeitura Operacional,Distrito
+06/05/2026,,PORTAL,Rua e bairro,"Calçadas, guias e postes",Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Ulisses Cruz,891,03077000,-23.5305401,-46.578862,MOOCA,TATUAPE
+06/05/2026,06/05/2026,CRM,Rua e bairro,"Calçadas, guias e postes",Denunciar Poste em mau estado,Finalizada,INTEGRACAO-SGF,Rua Augusta,737,01305100,-23.5522734,-46.6529304,SE,CONSOLACAO
+06/05/2026,,PORTAL,Rua e bairro,"Calçadas, guias e postes",Denunciar Poste em mau estado,Em Andamento,INTEGRACAO-SGF,Rua Bela Cintra,500,01415000,-23.5532045,-46.6576169,SE,CONSOLACAO
+06/05/2026,,PORTAL,Rua e bairro,"Calçadas, guias e postes",Denunciar Fiação solta na calçada,Em Andamento,INTEGRACAO-SGF,Rua Augusta,100,01304000,-23.5502188,-46.6471767,SE,CONSOLACAO
+06/05/2026,,PORTAL,Rua e bairro,"Calçadas, guias e postes",Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Gercino Gomes Da Silva,80,04421225,-23.6928672,-46.6340049,CIDADE ADEMAR,PEDREIRA
+06/05/2026,,PORTAL,Rua e bairro,"Calçadas, guias e postes",Denunciar Poste em mau estado,Em Andamento,INTEGRACAO-SGF,Rua Gercino Gomes Da Silva,80,04421225,-23.6928672,-46.6340049,CIDADE ADEMAR,PEDREIRA
+06/05/2026,,PORTAL,Rua e bairro,"Calçadas, guias e postes",Denunciar Poste em mau estado,Em Andamento,INTEGRACAO-SGF,,,,,,,
+06/05/2026,,PORTAL,Rua e bairro,"Calçadas, guias e postes",Denunciar Fiação solta na calçada,Em Andamento,INTEGRACAO-SGF,,,,,,,
+06/05/2026,06/05/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Gercino Gomes Da Silva,80,04421225,-23.6928672,-46.6340049,CIDADE ADEMAR,PEDREIRA
+06/05/2026,10/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Augusta,737,01305100,-23.5522365,-46.6529505,SE,CONSOLACAO
+06/05/2026,10/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Ulisses Cruz,527,03077000,-23.5322221,-46.5818448,MOOCA,TATUAPE
+07/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Em Andamento,INTEGRACAO-SGF,Rua Blanche Marchesi,20,04429290,-23.679501,-46.6604517,CIDADE ADEMAR,CIDADE ADEMAR
+07/05/2026,,PORTAL,Rua e bairro,"Calçadas, guias e postes",Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Antônio Florêncio de Souza,97,03386100,-23.5834762,-46.5287464,ARICANDUVA-FORMOSA-CARRAO,VILA FORMOSA
+07/05/2026,10/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Bela Cintra,1149,01415003,-23.556934,-46.6622836,PINHEIROS,JARDIM PAULISTA
+08/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Egídio Felini,110,02815040,-23.4463498,-46.7165256,PIRITUBA-JARAGUA,JARAGUA
+11/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Agamenon Magalhães,46,05105090,-23.5116838,-46.75442289999999,LAPA,JAGUARA
+11/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Ari dos Santos,149,05594160,-23.5841805,-46.7403051,BUTANTA,BUTANTA
+11/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Edvard Carmilo,1016,05528001,-23.5972162,-46.7557272,BUTANTA,VILA SONIA
+11/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida Intercontinental,500,05525060,-23.6018041,-46.7523636,BUTANTA,VILA SONIA
+11/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Francisco Iasi,92,05407050,-23.563117,-46.68837329999999,PINHEIROS,PINHEIROS
+11/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida Sapopemba,12189,03975000,-23.6126728,-46.4906461,SAPOPEMBA,SAPOPEMBA
+11/05/2026,15/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Finalizada,INTEGRACAO-SGF,Rua Pedro de Godói,342,03138010,-23.5875971,-46.5810999,VILA PRUDENTE,VILA PRUDENTE
+11/05/2026,14/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Cotoxó,916,05021001,-23.5347996,-46.6868515,LAPA,PERDIZES
+11/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Sargento Luís Rodrigues Filho,100,03977360,-23.6173192,-46.4968424,SAPOPEMBA,SAPOPEMBA
+11/05/2026,15/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Pedro de Godói,294,03138010,-23.5876473,-46.5815673,VILA PRUDENTE,VILA PRUDENTE
+11/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Dionísio da Costa,410,04117110,-23.5894058,-46.6247364,VILA MARIANA,VILA MARIANA
+11/05/2026,18/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Manguari,257,02167080,-23.5242581,-46.5813525,VILA MARIA-VILA GUILHERME,VILA MARIA
+11/05/2026,26/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Luís Pereira da Silva,250,03266040,-23.5969738,-46.537433,VILA PRUDENTE,SAO LUCAS
+12/05/2026,21/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Avenida Moema,81,04075010,-23.6025701,-46.6606031,VILA MARIANA,MOEMA
+12/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Coronel Diogo,89,01545000,-23.5781566,-46.6270119,VILA MARIANA,LIBERDADE
+12/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Antônio Macuco Alves,150,05382050,-23.573592,-46.7627177,BUTANTA,RIO PEQUENO
+12/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Ararima,143,02466020,-23.4971157,-46.6402092,SANTANA-TUCURUVI,SANTANA
+12/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Benedito Carlos Brunini,193,08051390,-23.5101192,-46.4673334,SAO MIGUEL,VILA JACUI
+12/05/2026,30/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Iracema,84,03279120,-23.5846495,-46.5428428,VILA PRUDENTE,SAO LUCAS
+12/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida Gregório Bezerra,10,04812200,-23.713636,-46.684935,CAPELA DO SOCORRO,CIDADE DUTRA
+12/05/2026,22/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Finalizada,INTEGRACAO-SGF,Avenida Doutor Francisco Mesquita,46,03153000,-23.59187,-46.5869608,VILA PRUDENTE,VILA PRUDENTE
+12/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Avenida Rio das Pedras,3201,03930310,-23.5801341,-46.5013161,SAO MATEUS,SAO MATEUS
+12/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Doutor José de Queirós Matoso,59,02927090,-23.4984299,-46.7059122,FREGUESIA-BRASILANDIA,FREGUESIA DO O
+12/05/2026,22/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Finalizada,INTEGRACAO-SGF,Rua Ingaí,156,03132080,-23.5828176,-46.584582,VILA PRUDENTE,VILA PRUDENTE
+12/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida Gustavo Adolfo,1330,02209001,-23.483129,-46.5866972,VILA MARIA-VILA GUILHERME,VILA MEDEIROS
+12/05/2026,01/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Roberto Park,110,03977000,-23.6139519,-46.4926189,SAPOPEMBA,SAPOPEMBA
+13/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Pascoal Dias,426,03971010,-23.6174307,-46.4788766,SAO MATEUS,SAO MATEUS
+13/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Henrique Peres,91,03123070,-23.5695374,-46.59364979999999,MOOCA,MOOCA
+13/05/2026,10/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Avenida Professor Xavier de Lima,385,03557000,-23.5422508,-46.5059991,PENHA,VILA MATILDE
+13/05/2026,26/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Luís Pereira da Silva,250,03266040,-23.5969738,-46.537433,VILA PRUDENTE,SAO LUCAS
+13/05/2026,12/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua David Fabricius,272,04860160,-23.7605532,-46.714796,CAPELA DO SOCORRO,CIDADE DUTRA
+13/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Coração Selvagem,2,08223390,-23.5248459,-46.4715539,ITAQUERA,ITAQUERA
+13/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Cavaleiro da Lua,22,08223420,-23.523642,-46.4715707,ITAQUERA,ITAQUERA
+13/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida Caititu,780,08223000,-23.5309883,-46.46824729999999,ITAQUERA,ITAQUERA
+13/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Piraçununga,1200,03187010,-23.5666658,-46.5802644,MOOCA,AGUA RASA
+13/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Chico Pontes,435,02067000,-23.5051558,-46.6078741,VILA MARIA-VILA GUILHERME,VILA GUILHERME
+13/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Dona Brígida,153,04111080,-23.5823656,-46.62971839999999,VILA MARIANA,VILA MARIANA
+13/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Manuel Inácio Alvarenga,168,02865110,-23.4768368,-46.6773432,FREGUESIA-BRASILANDIA,BRASILANDIA
+13/05/2026,02/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Júlio Barian,39,08255630,-23.5454816,-46.4342501,ITAQUERA,JOSE BONIFACIO
+14/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Alves Pontual,352,04722000,-23.6425386,-46.70213649999999,SANTO AMARO,SANTO AMARO
+14/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Benigno Nogueira Franco,45,08111420,-23.493323,-46.3753288,ITAIM PAULISTA,ITAIM PAULISTA
+14/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Jacirendi,406,03080000,-23.53143,-46.5784639,MOOCA,TATUAPE
+14/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua César Guimarães,91,01545070,-23.5804924,-46.61770449999999,VILA MARIANA,VILA MARIANA
+14/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Florentino Capelozza,18,03088090,-23.529,-46.5632877,MOOCA,TATUAPE
+14/05/2026,12/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Cancioneiro de Évora,413,04708010,-23.6302323,-46.6931612,SANTO AMARO,SANTO AMARO
+14/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Rodolfo Alves de Faria,85,02865030,-23.472673,-46.6771283,FREGUESIA-BRASILANDIA,BRASILANDIA
+14/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua do Jambo,45,02168070,-23.5207409,-46.5807653,VILA MARIA-VILA GUILHERME,VILA MARIA
+14/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida Comandante Antônio Paiva Sampaio,1022,02269000,-23.468446,-46.5946222,SANTANA-TUCURUVI,TUCURUVI
+14/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Fernando Lona,103,02259100,-23.4718813,-46.58031829999999,JACANA-TREMEMBE,JACANA
+14/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Antônio Palhano Guimarães,49,05542230,-23.5855202,-46.7501464,BUTANTA,BUTANTA
+14/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Miguel Teles Júnior,239,01540040,-23.5653546,-46.6232337,SE,LIBERDADE
+14/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Estrada do Mestre,83,02988000,-23.41991,-46.7162474,PIRITUBA-JARAGUA,JARAGUA
+14/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Antônio Cardoso Nogueira,673,05184000,-23.4579951,-46.7556711,PIRITUBA-JARAGUA,JARAGUA
+14/05/2026,24/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Avenida Guido Caloi,1,05802140,-23.6451221,-46.72741910000001,M BOI MIRIM,JARDIM SAO LUIS
+15/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Sousa Melo e Alvim,20,03755030,-23.5099657,-46.50349840000001,ERMELINO MATARAZZO,PONTE RASA
+15/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Geraldo Martins Santana,41,04658280,-23.6679891,-46.6682267,CIDADE ADEMAR,CIDADE ADEMAR
+15/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Ferraz de Vasconcelos,135,02760060,-23.4812121,-46.6783555,FREGUESIA-BRASILANDIA,FREGUESIA DO O
+15/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida General Ataliba Leonel,3291,02242001,-23.487224,-46.6074065,SANTANA-TUCURUVI,TUCURUVI
+15/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Germano Gottsfritz,275,04434150,-23.6831748,-46.6652761,CIDADE ADEMAR,CIDADE ADEMAR
+15/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Cléo de Merode,51,03977500,-23.6183493,-46.4929707,SAPOPEMBA,SAPOPEMBA
+15/05/2026,03/07/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Avenida Marechal Tito,3012,08160495,-23.4945742,-46.4170905,ITAIM PAULISTA,VILA CURUCA
+15/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua José de Alvarenga,03,05164127,-23.4756824,-46.7593426,PIRITUBA-JARAGUA,SAO DOMINGOS
+15/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Alvino Pimenta dos Reis,104,02230020,-23.4838569,-46.564143,JACANA-TREMEMBE,JACANA
+15/05/2026,11/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Finalizada,INTEGRACAO-SGF,Estrada Evangelista de Souza,3290,04877110,-23.8999788,-46.6433922,PARELHEIROS,PARELHEIROS
+16/05/2026,30/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Dario Meira,134,03223050,-23.5939521,-46.5570692,VILA PRUDENTE,SAO LUCAS
+16/05/2026,29/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Doutor Maurício de Lacerda,349,04303191,-23.6256998,-46.6359664,VILA MARIANA,SAUDE
+16/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida Fagundes Filho,756,04304001,-23.6267138,-46.63422670000001,VILA MARIANA,SAUDE
+16/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Palmas de São Moisés,189,02071060,-23.4570254,-46.6562577,CASA VERDE-LIMAO-CACHOEIRINHA,CACHOEIRINHA
+16/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Lagoa Santa,126,02652060,-23.4583941,-46.6564544,CASA VERDE-LIMAO-CACHOEIRINHA,CACHOEIRINHA
+16/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Palmas de São Moisés,189,02071060,-23.4570254,-46.6562577,CASA VERDE-LIMAO-CACHOEIRINHA,CACHOEIRINHA
+16/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Lagoa Santa,126,02652060,-23.4583941,-46.6564544,CASA VERDE-LIMAO-CACHOEIRINHA,CACHOEIRINHA
+16/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Maria Maria,75,02652130,-23.4568125,-46.6574482,CASA VERDE-LIMAO-CACHOEIRINHA,CACHOEIRINHA
+16/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Maria Maria,75,02652130,-23.4568125,-46.6574482,CASA VERDE-LIMAO-CACHOEIRINHA,CACHOEIRINHA
+16/05/2026,28/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Doutor Maurício de Lacerda,494,04303192,-23.6255187,-46.6344149,VILA MARIANA,SAUDE
+16/05/2026,29/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Doutor Maurício de Lacerda,416,04303191,-23.6256668,-46.6351705,VILA MARIANA,SAUDE
+16/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida Fagundes Filho,191,04304010,-23.6269298,-46.6396029,VILA MARIANA,SAUDE
+17/05/2026,16/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Finalizada,INTEGRACAO-SGF,Rua José Mauri,10,08431440,-23.5273071,-46.41739010000001,GUAIANASES,LAJEADO
+18/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Filomeno Batista de Araújo,151,03985130,-23.6059309,-46.5200413,SAPOPEMBA,SAPOPEMBA
+18/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Ferraz de Vasconcelos,132,02760060,-23.481146,-46.678458,FREGUESIA-BRASILANDIA,FREGUESIA DO O
+18/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Estrada Antiga do Mar,466,04413000,-23.6696548,-46.6397805,JABAQUARA,JABAQUARA
+18/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua João Abreu Castelo Branco,84,08270150,-23.5594073,-46.4651051,ITAQUERA,PARQUE DO CARMO
+18/05/2026,29/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Dona Inácia Uchôa,620,04110021,-23.5823733,-46.6301308,VILA MARIANA,VILA MARIANA
+18/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Augusto Reginato,61,03434030,-23.5571326,-46.533384,ARICANDUVA-FORMOSA-CARRAO,CARRAO
+18/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Dom Joaquim de Melo,102,03122050,-23.5664558,-46.6000491,MOOCA,MOOCA
+18/05/2026,29/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Pedro de Toledo,840,04039002,-23.5981115,-46.6447647,VILA MARIANA,VILA MARIANA
+18/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Antônio Alzelino Guerra,340,05883260,-23.673862,-46.7800492,CAMPO LIMPO,CAPAO REDONDO
+18/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Quebedo e Vasconcelos,139,03952040,-23.5892005,-46.48387779999999,SAO MATEUS,SAO MATEUS
+18/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Ricardo da Costa,262,08473620,-23.5870632,-46.3950221,CIDADE TIRADENTES,CIDADE TIRADENTES
+18/05/2026,25/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Finalizada,INTEGRACAO-SGF,Rua Ataliba Vieira,909,02216000,-23.4896205,-46.5842687,VILA MARIA-VILA GUILHERME,VILA MEDEIROS
+18/05/2026,10/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Travessa João Jufre,22,03662070,-23.5210323,-46.4994232,PENHA,PENHA
+18/05/2026,26/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Canápolis,447,02220070,-23.4917629,-46.57853189999999,VILA MARIA-VILA GUILHERME,VILA MEDEIROS
+18/05/2026,11/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Doutor Dioracy Nascimento,235,04891010,-23.8305392,-46.7293926,PARELHEIROS,PARELHEIROS
+19/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Alexandre Kipnis,156,04430110,-23.689483,-46.645652,CIDADE ADEMAR,CIDADE ADEMAR
+19/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida Giovanni Gronchi,4559,05724003,-23.620184,-46.7329309,CAMPO LIMPO,VILA ANDRADE
+19/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Estrada Antiga do Mar,467,04413000,-23.6697397,-46.6397449,JABAQUARA,JABAQUARA
+19/05/2026,03/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Doutor Alcides de Campos,723,04336160,-23.6671845,-46.6449933,JABAQUARA,JABAQUARA
+19/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Antônio André Rodrigues,135,03372030,-23.5725481,-46.5580291,MOOCA,AGUA RASA
+19/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Avenida Brigadeiro Luís Antônio,792,01318001,-23.556843,-46.6405104,PINHEIROS,BELA VISTA
+19/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua João Daudt Filho,238,02834030,-23.4719308,-46.6921423,FREGUESIA-BRASILANDIA,BRASILANDIA
+19/05/2026,20/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Avenida Professor Gióia Martins,140,05632020,-23.5970826,-46.7385399,BUTANTA,VILA SONIA
+19/05/2026,23/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Cabo José Clemeneano de Carvalho,234,03226000,-23.5905173,-46.5690637,VILA PRUDENTE,VILA PRUDENTE
+19/05/2026,23/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Avenida José da Nóbrega Botelho,280,03226010,-23.5909866,-46.5693472,VILA PRUDENTE,VILA PRUDENTE
+20/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Itatiaia,380,04310010,-23.6328511,-46.6404519,JABAQUARA,JABAQUARA
+20/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Baltazar Lisboa,384,04110061,-23.5851451,-46.631532,VILA MARIANA,VILA MARIANA
+20/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Serra das Divisões,500,03587000,-23.5555434,-46.48711429999999,ITAQUERA,CIDADE LIDER
+20/05/2026,29/05/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Avenida Agami,190,04522000,-23.5998117,-46.6616714,VILA MARIANA,MOEMA
+20/05/2026,08/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Aldeia Paracanti,235,03667020,-23.532156,-46.4954958,PENHA,PENHA
+20/05/2026,23/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Avenida Guapira,2300,02265002,-23.4699898,-46.5845354,JACANA-TREMEMBE,JACANA
+20/05/2026,23/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Avenida Guapira,2324,02265002,-23.4698261,-46.5842055,JACANA-TREMEMBE,JACANA
+20/05/2026,10/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Eliana Zanetti,5,03440010,-23.5419604,-46.5420834,ARICANDUVA-FORMOSA-CARRAO,CARRAO
+20/05/2026,10/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Nilza,696,03651120,-23.5284457,-46.5180447,PENHA,PENHA
+20/05/2026,24/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Finalizada,INTEGRACAO-SGF,Avenida Thomas Edison,192,01140000,-23.5240151,-46.66490599999999,LAPA,BARRA FUNDA
+20/05/2026,12/06/2026,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Avenida Santo Amaro,7228,04702002,-23.6432125,-46.70096849999999,SANTO AMARO,SANTO AMARO
+21/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Barra da Onça,231,02230000,-23.4839504,-46.5637783,JACANA-TREMEMBE,JACANA
+21/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Tupanaci,420,04131020,-23.6048625,-46.6194478,IPIRANGA,CURSINO
+21/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Marajá-Açu,58,03578090,-23.5592481,-46.5028108,ITAQUERA,CIDADE LIDER
+21/05/2026,28/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Doutor Maurício de Lacerda,522,04303192,-23.6255381,-46.6342298,VILA MARIANA,SAUDE
+21/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Rosa Mendes,85,03757090,-23.5099325,-46.5002554,ERMELINO MATARAZZO,PONTE RASA
+21/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Agropoli,26,05879480,-23.6893464,-46.7980214,CAMPO LIMPO,CAPAO REDONDO
+21/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Poste em mau estado,Aberto,INTEGRACAO-SGF,Rua Desembargador Isnard dos Réis,1093,08130000,-23.5090095,-46.3669542,ITAIM PAULISTA,ITAIM PAULISTA
+22/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Fidalga,92,05432000,-23.5582936,-46.6881535,PINHEIROS,PINHEIROS
+22/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Louceiras,25,08270320,-23.5595245,-46.4569968,ITAQUERA,PARQUE DO CARMO
+22/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua José da Silva Mendes,2,04557020,-23.6048195,-46.68179749999999,PINHEIROS,ITAIM BIBI
+22/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Travessa Flamínio Bellini Carri,461,08382020,-23.6140967,-46.4147433,SAO MATEUS,IGUATEMI
+22/05/2026,,CRM,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Pedro Padovani,251,04193170,-23.6493644,-46.6109121,IPIRANGA,SACOMA
+22/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Achaira,529,05876010,-23.6968043,-46.79345559999999,M BOI MIRIM,JARDIM ANGELA
+23/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Abílio Soares,2,01419001,-23.5730096,-46.6420927,VILA MARIANA,VILA MARIANA
+24/05/2026,30/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Marquês de Santo Amaro,339,03214080,-23.606066,-46.5651845,VILA PRUDENTE,VILA PRUDENTE
+24/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Santa Cruz,1778,04122001,-23.6017616,-46.6214317,IPIRANGA,CURSINO
+24/05/2026,28/05/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Doutor Maurício de Lacerda,522,04303192,-23.6255381,-46.6342298,VILA MARIANA,SAUDE
+24/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Sebastião Guimarães Correa,5,04304060,-23.6257831,-46.6337033,VILA MARIANA,SAUDE
+24/05/2026,01/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Doutor Maurício de Lacerda,444,04303192,-23.625596,-46.6346927,VILA MARIANA,SAUDE
+24/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Alameda Ribeirão Preto,506,01331000,-23.5623377,-46.6511952,SE,BELA VISTA
+24/05/2026,,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Aberto,INTEGRACAO-SGF,Rua Senador Elói de Souza,340,03821060,-23.4882725,-46.5005911,ERMELINO MATARAZZO,ERMELINO MATARAZZO
+24/05/2026,26/06/2026,PORTAL,Rua e bairro,Fiação e Postes,Denunciar Fiação solta na calçada,Finalizada,INTEGRACAO-SGF,Rua Baltar,1066,03209000,-23.6055558,-46.565953,VILA PRUDENTE,VILA PRUDENTE

@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+# pasta de pouso e cache: dados brutos não vão para o repositório
+chegada/
+gs_chegada/
+_cache/
+*.tmp
+*.part
+# segredos
+.env
+airflow_home/
