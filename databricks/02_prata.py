@@ -38,6 +38,12 @@ if len(SAL) < 16:
 assert len(SAL) >= 16, "Sal inválido"
 
 sys.path.insert(0, os.getcwd())
+# Recarrega a gs_lib a cada execução: depois de um Pull no Git folder, a sessão do
+# Databricks continuaria usando a versão antiga guardada em memória.
+import importlib
+for _m in [m for m in list(sys.modules) if m == "gs_lib" or m.startswith("gs_lib.")]:
+    del sys.modules[_m]
+importlib.invalidate_caches()
 from gs_lib import iluminacao as il
 from gs_lib.comum import aplicar_regras
 from gs_lib.delta_io import merge, registrar_qualidade

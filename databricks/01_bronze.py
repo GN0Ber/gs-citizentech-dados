@@ -20,6 +20,12 @@ BASE = "/Volumes/workspace/gs/chegada"
 
 import os, sys
 sys.path.insert(0, os.getcwd())  # Git folder: permite importar gs_lib ao lado do notebook
+# Recarrega a gs_lib a cada execução: depois de um Pull no Git folder, a sessão do
+# Databricks continuaria usando a versão antiga guardada em memória.
+import importlib
+for _m in [m for m in list(sys.modules) if m == "gs_lib" or m.startswith("gs_lib.")]:
+    del sys.modules[_m]
+importlib.invalidate_caches()
 from pyspark.sql import functions as F
 from gs_lib.comum import nome_coluna
 from gs_lib.delta_io import registrar_carga
